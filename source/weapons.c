@@ -413,7 +413,6 @@ void T_MissileTouch()
 		return;
 	}
 	self->voided = 1;
-
 	if ( trap_pointcontents( PASSVEC3( self->s.v.origin ) ) == CONTENT_SKY )
 	{
 		ent_remove( self );
@@ -435,10 +434,10 @@ void T_MissileTouch()
 
 //  trap_sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
 	normalize( self->s.v.velocity, tmp );
-	VectorScale( tmp, 8, tmp );
+	VectorScale( tmp, -8, tmp );
 	VectorAdd( self->s.v.origin, tmp, self->s.v.origin )
 // self->s.v.origin = self->s.v.origin - 8 * normalize(self->s.v.velocity);
-	    trap_WriteByte( MSG_MULTICAST, SVC_TEMPENTITY );
+	trap_WriteByte( MSG_MULTICAST, SVC_TEMPENTITY );
 	trap_WriteByte( MSG_MULTICAST, TE_EXPLOSION );
 	trap_WriteCoord( MSG_MULTICAST, self->s.v.origin[0] );
 	trap_WriteCoord( MSG_MULTICAST, self->s.v.origin[1] );
@@ -466,19 +465,19 @@ void W_FireRocket()
 	trap_WriteByte( MSG_ONE, SVC_SMALLKICK );
 
 	newmis = spawn();
+	g_globalvars.newmis = EDICT_TO_PROG( newmis );
 	newmis->s.v.owner = EDICT_TO_PROG( self );
 	newmis->s.v.movetype = MOVETYPE_FLYMISSILE;
 	newmis->s.v.solid = SOLID_BBOX;
 
 // set newmis speed     
-
 	makevectors( self->s.v.v_angle );
 	aim( newmis->s.v.velocity );	// = aim(self, 1000);
 	VectorScale( newmis->s.v.velocity, 1000, newmis->s.v.velocity );
 // newmis->s.v.velocity = newmis->s.v.velocity * 1000;
 
 	vectoangles( newmis->s.v.velocity, newmis->s.v.angles );
-
+	
 	newmis->s.v.touch = ( func_t ) T_MissileTouch;
 	newmis->voided = 0;
 
@@ -700,6 +699,7 @@ void W_FireGrenade()
 	trap_WriteByte( MSG_ONE, SVC_SMALLKICK );
 
 	newmis = spawn();
+	g_globalvars.newmis = EDICT_TO_PROG( newmis );
 	newmis->voided = 0;
 	newmis->s.v.owner = EDICT_TO_PROG( self );
 	newmis->s.v.movetype = MOVETYPE_BOUNCE;
