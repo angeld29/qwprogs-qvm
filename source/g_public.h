@@ -2,7 +2,7 @@
 //
 // g_public.h -- game module information visible to server
 
-#define	GAME_API_VERSION	1
+#define	GAME_API_VERSION	2
 
 
 //===============================================================
@@ -147,4 +147,5 @@ typedef struct {
 	int             sizeofent;
 	globalvars_t   *global;
 	field_t        *fields;
+	int 		APIversion;
 } gameData_t;

@@ -75,12 +75,12 @@ void plat_spawn_inside_trigger()
 		tmax[1] = tmin[1] + 1;
 	}
 
-	trap_setsize( trigger, PASSVEC3( tmin ), PASSVEC3( tmax ) );
+	setsize( trigger, PASSVEC3( tmin ), PASSVEC3( tmax ) );
 }
 
 void plat_hit_top()
 {
-	trap_sound( self, CHAN_NO_PHS_ADD + CHAN_VOICE, self->s.v.noise1, 1, ATTN_NORM );
+	sound( self, CHAN_NO_PHS_ADD + CHAN_VOICE, self->s.v.noise1, 1, ATTN_NORM );
 	self->state = STATE_TOP;
 	self->s.v.think = ( func_t ) plat_go_down;
 	self->s.v.nextthink = self->s.v.ltime + 3;
@@ -88,20 +88,20 @@ void plat_hit_top()
 
 void plat_hit_bottom()
 {
-	trap_sound( self, CHAN_NO_PHS_ADD + CHAN_VOICE, self->s.v.noise1, 1, ATTN_NORM );
+	sound( self, CHAN_NO_PHS_ADD + CHAN_VOICE, self->s.v.noise1, 1, ATTN_NORM );
 	self->state = STATE_BOTTOM;
 }
 
 void plat_go_down()
 {
-	trap_sound( self, CHAN_VOICE, self->s.v.noise, 1, ATTN_NORM );
+	sound( self, CHAN_VOICE, self->s.v.noise, 1, ATTN_NORM );
 	self->state = STATE_DOWN;
 	SUB_CalcMove( self->pos2, self->speed, plat_hit_bottom );
 }
 
 void plat_go_up()
 {
-	trap_sound( self, CHAN_VOICE, self->s.v.noise, 1, ATTN_NORM );
+	sound( self, CHAN_VOICE, self->s.v.noise, 1, ATTN_NORM );
 	self->state = STATE_UP;
 	SUB_CalcMove( self->pos1, self->speed, plat_hit_top );
 }
@@ -220,9 +220,9 @@ void SP_func_plat()
 	self->s.v.classname = "plat";
 	self->s.v.solid = SOLID_BSP;
 	self->s.v.movetype = MOVETYPE_PUSH;
-	trap_setorigin( self, PASSVEC3( self->s.v.origin ) );
-	trap_setmodel( self, self->s.v.model );
-	trap_setsize( self, PASSVEC3( self->s.v.mins ), PASSVEC3( self->s.v.maxs ) );
+	setorigin( self, PASSVEC3( self->s.v.origin ) );
+	setmodel( self, self->s.v.model );
+	setsize( self, PASSVEC3( self->s.v.mins ), PASSVEC3( self->s.v.maxs ) );
 
 	self->s.v.blocked = ( func_t ) plat_crush;
 	if ( !self->speed )
@@ -248,7 +248,7 @@ void SP_func_plat()
 		self->s.v.use = ( func_t ) plat_use;
 	} else
 	{
-		trap_setorigin( self, PASSVEC3( self->pos2 ) );
+		setorigin( self, PASSVEC3( self->pos2 ) );
 		self->state = STATE_BOTTOM;
 	}
 }
@@ -282,7 +282,7 @@ void train_wait()
 	if ( self->wait )
 	{
 		self->s.v.nextthink = self->s.v.ltime + self->wait;
-		trap_sound( self, CHAN_NO_PHS_ADD + CHAN_VOICE, self->s.v.noise, 1,
+		sound( self, CHAN_NO_PHS_ADD + CHAN_VOICE, self->s.v.noise, 1,
 			    ATTN_NORM );
 	} else
 		self->s.v.nextthink = self->s.v.ltime + 0.1;
@@ -308,7 +308,7 @@ void train_next()
 	else
 		self->wait = 0;
 
-	trap_sound( self, CHAN_VOICE, self->s.v.noise1, 1, ATTN_NORM );
+	sound( self, CHAN_VOICE, self->s.v.noise1, 1, ATTN_NORM );
 	VectorSubtract( targ->s.v.origin, self->s.v.mins, tmpv );
 	SUB_CalcMove( tmpv, self->speed, train_wait );
 }
@@ -322,7 +322,7 @@ void func_train_find()
 		G_Error( "func_train_find: no next target" );
 
 	self->s.v.target = targ->s.v.target;
-	trap_setorigin( self, targ->s.v.origin[0] - self->s.v.mins[0],
+	setorigin( self, targ->s.v.origin[0] - self->s.v.mins[0],
 			targ->s.v.origin[1] - self->s.v.mins[1],
 			targ->s.v.origin[2] - self->s.v.mins[2] );
 	if ( !self->s.v.targetname )
@@ -375,9 +375,9 @@ void SP_func_train()
 	self->s.v.use = ( func_t ) train_use;
 	self->s.v.classname = "train";
 
-	trap_setmodel( self, self->s.v.model );
-	trap_setsize( self, PASSVEC3( self->s.v.mins ), PASSVEC3( self->s.v.maxs ) );
-	trap_setorigin( self, PASSVEC3( self->s.v.origin ) );
+	setmodel( self, self->s.v.model );
+	setsize( self, PASSVEC3( self->s.v.mins ), PASSVEC3( self->s.v.maxs ) );
+	setorigin( self, PASSVEC3( self->s.v.origin ) );
 
 // start trains on the second frame, to make sure their targets have had
 // a chance to spawn
@@ -409,9 +409,9 @@ void SP_misc_teleporttrain()
 	trap_precache_sound( "misc/null.wav" );
 
 	trap_precache_model( "progs/teleport.mdl" );
-	trap_setmodel( self, "progs/teleport.mdl" );
-	trap_setsize( self, PASSVEC3( self->s.v.mins ), PASSVEC3( self->s.v.maxs ) );
-	trap_setorigin( self, PASSVEC3( self->s.v.origin ) );
+	setmodel( self, "progs/teleport.mdl" );
+	setsize( self, PASSVEC3( self->s.v.mins ), PASSVEC3( self->s.v.maxs ) );
+	setorigin( self, PASSVEC3( self->s.v.origin ) );
 
 // start trains on the second frame, to make sure their targets have had
 // a chance to spawn

@@ -62,6 +62,24 @@ void            G_dprint( const char *fmt, ... );
 int             streq( char *s1, char *s2 );
 int             strneq( char *s1, char *s2 );
 void            aim( vec3_t ret );
+void    	setorigin( gedict_t * ed, float origin_x, float origin_y, float origin_z );
+void    	setsize( gedict_t * ed, float min_x, float min_y, float min_z, float max_x,
+		 float max_y, float max_z );
+void    	setmodel( gedict_t * ed, char *model );
+void    	sound( gedict_t * ed, int channel, char *samp, int vol, float att );
+gedict_t 	*checkclient(  );
+void    	traceline( float v1_x, float v1_y, float v1_z, float v2_x, float v2_y, float v2_z,
+		   int nomonst, gedict_t * ed );
+void    	stuffcmd( gedict_t * ed, const char *fmt , ...);
+int     	droptofloor( gedict_t * ed );
+int     	walkmove( gedict_t * ed, float yaw, float dist );
+int     	checkbottom( gedict_t * ed );
+void    	makestatic( gedict_t * ed );
+void    	setspawnparam( gedict_t * ed );
+void    	logfrag( gedict_t * killer, gedict_t * killee );
+void    	infokey( gedict_t * ed, char *key, char *valbuff, int sizebuff );
+void    	WriteEntity( int to, gedict_t * ed );
+void    	disableupdates( gedict_t * ed, float time );
 
 //
 //  subs.c

@@ -69,7 +69,7 @@ void t_movetarget()
 	other = temp;
 
 	if ( streq( self->s.v.classname, "monster_ogre" ) )
-		trap_sound( self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE );	// play chainsaw drag sound
+		sound( self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE );	// play chainsaw drag sound
 
 //dprint ("t_movetarget\n");
 	self->movetarget = find( world, FOFS( s.v.targetname ), other->s.v.target );
@@ -94,7 +94,7 @@ void movetarget_f()
 
 	self->s.v.solid = SOLID_TRIGGER;
 	self->s.v.touch = ( func_t ) t_movetarget;
-	trap_setsize( self, -8, -8, -8, 8, 8, 8 );
+	setsize( self, -8, -8, -8, 8, 8, 8 );
 
 }
 

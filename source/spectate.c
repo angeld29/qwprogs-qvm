@@ -50,7 +50,7 @@ void SpectatorImpulseCommand()
 				  "info_player_deathmatch" );
 		if ( goal )
 		{
-			trap_setorigin( self, PASSVEC3( goal->s.v.origin ) );
+			setorigin( self, PASSVEC3( goal->s.v.origin ) );
 			VectorCopy( goal->s.v.angles, self->s.v.angles );
 			self->s.v.fixangle = true;	// turn this way immediately
 		} else

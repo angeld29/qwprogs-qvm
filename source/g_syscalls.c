@@ -14,6 +14,18 @@
 static int      ( QDECL * syscall ) ( int arg, ... ) =
     ( int ( QDECL * ) ( int, ... ) ) -1;
 
+typedef union fi_s
+{
+	float			_float;
+	int			_int;
+} fi_t;	
+
+int PASSFLOAT(float x)
+{
+	fi_t rc;
+	rc._float = x;
+	return rc._int;
+}
 
 
 
@@ -29,138 +41,140 @@ int trap_GetApiVersion()
 
 qboolean trap_GetEntityToken( char *token, int size )
 {
-	return ( qboolean ) syscall( G_GetEntityToken, token, size );
+	return ( qboolean ) syscall( G_GetEntityToken, (int)token, size );
 }
 void trap_DPrintf( const char *fmt )
 {
-	syscall( G_DPRINT, fmt );
+	syscall( G_DPRINT, (int)fmt );
 }
 void trap_BPrint( int level, const char *fmt )
 {
-	syscall( G_BPRINT, level, fmt );
+	syscall( G_BPRINT, level, (int) fmt );
 }
 
-void trap_SPrint( gedict_t * ed, int level, const char *fmt )
+void trap_SPrint( int edn, int level, const char *fmt )
 {
-	syscall( G_SPRINT, NUM_FOR_EDICT( ed ), level, fmt );
+	syscall( G_SPRINT, edn, level, (int)fmt );
 }
-void trap_CenterPrint( gedict_t * ed, const char *fmt )
+void trap_CenterPrint( int edn, const char *fmt )
 {
-	syscall( G_CENTERPRINT, NUM_FOR_EDICT( ed ), fmt );
+	syscall( G_CENTERPRINT, edn , (int)fmt );
 }
 
 void trap_Error( const char *fmt )
 {
-	syscall( G_ERROR, fmt );
+	syscall( G_ERROR, (int) fmt );
 }
 
-gedict_t       *trap_spawn()
+int	trap_spawn()
 {
-	return PROG_TO_EDICT( syscall( G_SPAWN_ENT ) );
+	return syscall( G_SPAWN_ENT ) ;
 }
 
-void trap_remove( gedict_t * ed )
+void trap_remove( int edn )
 {
-	syscall( G_REMOVE_ENT, EDICT_TO_PROG( ed ) );
+	syscall( G_REMOVE_ENT, edn  );
 }
 
 void trap_precache_sound( char *name )
 {
-	syscall( G_PRECACHE_SOUND, name );
+	syscall( G_PRECACHE_SOUND, (int) name );
 }
 void trap_precache_model( char *name )
 {
-	syscall( G_PRECACHE_MODEL, name );
+	syscall( G_PRECACHE_MODEL, (int) name );
 }
 
-void trap_setorigin( gedict_t * ed, float origin_x, float origin_y, float origin_z )
+void trap_setorigin( int edn, float origin_x, float origin_y, float origin_z )
 {
-	syscall( G_SETORIGIN, EDICT_TO_PROG( ed ), ( double ) origin_x,
-		 ( double ) origin_y, ( double ) origin_z );
+	syscall( G_SETORIGIN,  edn, PASSFLOAT(origin_x),
+		 PASSFLOAT(origin_y), PASSFLOAT(origin_z) );
 }
 
-void trap_setsize( gedict_t * ed, float min_x, float min_y, float min_z, float max_x,
+void trap_setsize( int edn, float min_x, float min_y, float min_z, float max_x,
 		   float max_y, float max_z )
 {
-	syscall( G_SETSIZE, EDICT_TO_PROG( ed ), ( double ) min_x, ( double ) min_y,
-		 ( double ) min_z, ( double ) max_x, ( double ) max_y, ( double ) max_z );
+	syscall( G_SETSIZE, edn, PASSFLOAT( min_x), PASSFLOAT( min_y),
+		 PASSFLOAT( min_z), PASSFLOAT( max_x), PASSFLOAT( max_y), PASSFLOAT( max_z ));
 }
 
-void trap_setmodel( gedict_t * ed, char *model )
+void trap_setmodel( int edn, char *model )
 {
-	syscall( G_SETMODEL, EDICT_TO_PROG( ed ), model );
+	syscall( G_SETMODEL, edn, (int)model );
 }
 
 void trap_ambientsound( float pos_x, float pos_y, float pos_z, char *samp, float vol,
 			float atten )
 {
-	syscall( G_AMBIENTSOUND, ( double ) pos_x, ( double ) pos_y, ( double ) pos_z,
-		 samp, ( double ) vol, ( double ) atten );
+	syscall( G_AMBIENTSOUND, PASSFLOAT( pos_x), PASSFLOAT( pos_y), PASSFLOAT( pos_z),
+		 (int)samp, PASSFLOAT( vol), PASSFLOAT( atten ));
 }
 
-void trap_sound( gedict_t * ed, int channel, char *samp, int vol, float att )
+void trap_sound( int edn, int channel, char *samp, int vol, float att )
 {
-	syscall( G_SOUND, EDICT_TO_PROG( ed ), channel, samp, vol, ( double ) att );
+	syscall( G_SOUND, edn, channel, (int)samp, vol, PASSFLOAT( att ));
 }
 
-gedict_t       *trap_checkclient()
+int trap_checkclient()
 {
-	return PROG_TO_EDICT( syscall( G_CHECKCLIENT ) );
+	return  syscall( G_CHECKCLIENT ) ;
 }
 void trap_traceline( float v1_x, float v1_y, float v1_z, float v2_x, float v2_y,
-		     float v2_z, int nomonst, gedict_t * ed )
+		     float v2_z, int nomonst, int edn )
 {
-	syscall( G_TRACELINE, ( double ) v1_x, ( double ) v1_y, ( double ) v1_z,
-		 ( double ) v2_x, ( double ) v2_y, ( double ) v2_z, nomonst,
-		 EDICT_TO_PROG( ed ) );
+	syscall( G_TRACELINE, PASSFLOAT( v1_x), PASSFLOAT( v1_y), PASSFLOAT( v1_z),
+		 PASSFLOAT( v2_x), PASSFLOAT( v2_y), PASSFLOAT( v2_z), nomonst,
+		 edn );
 }
 
-void trap_stuffcmd( gedict_t * ed, const char *fmt )
+void trap_stuffcmd( int edn, const char *fmt )
 {
-	syscall( G_STUFFCMD, NUM_FOR_EDICT( ed ), fmt );
+	syscall( G_STUFFCMD, edn, (int)fmt );
 }
 
 void trap_localcmd( const char *fmt )
 {
-	syscall( G_LOCALCMD, fmt );
+	syscall( G_LOCALCMD,(int) fmt );
 }
 float trap_cvar( const char *var )
 {
-	int             tmp = syscall( G_CVAR, var );
+	fi_t tmp;
+	
+	tmp._int = syscall( G_CVAR, (int)var );
 
-	return *( float * ) &tmp;
+	return tmp._float;
 }
 
 void trap_cvar_set( const char *var, const char *val )
 {
-	syscall( G_CVAR_SET, var, val );
+	syscall( G_CVAR_SET, (int)var, (int)val );
 }
 
-int trap_droptofloor( gedict_t * ed )
+int trap_droptofloor( int edn )
 {
-	return syscall( G_DROPTOFLOOR, EDICT_TO_PROG( ed ) );
+	return syscall( G_DROPTOFLOOR, edn );
 }
 
-int trap_walkmove( gedict_t * ed, float yaw, float dist )
+int trap_walkmove( int edn, float yaw, float dist )
 {
-	return syscall( G_WALKMOVE, EDICT_TO_PROG( ed ), ( double ) yaw,
-			( double ) dist );
+	return syscall( G_WALKMOVE, edn, PASSFLOAT( yaw),
+			PASSFLOAT( dist ));
 }
 
 void trap_lightstyle( int style, char *val )
 {
-	syscall( G_LIGHTSTYLE, style, val );
+	syscall( G_LIGHTSTYLE, style, (int)val );
 }
 
-int trap_checkbottom( gedict_t * ed )
+int trap_checkbottom( int edn )
 {
-	return syscall( G_CHECKBOTTOM, EDICT_TO_PROG( ed ) );
+	return syscall( G_CHECKBOTTOM, edn );
 }
 
 int trap_pointcontents( float origin_x, float origin_y, float origin_z )
 {
-	return syscall( G_POINTCONTENTS, ( double ) origin_x, ( double ) origin_y,
-			( double ) origin_z );
+	return syscall( G_POINTCONTENTS, PASSFLOAT( origin_x), PASSFLOAT( origin_y),
+			PASSFLOAT( origin_z ));
 }
 
 int trap_nextent( int n )
@@ -169,14 +183,14 @@ int trap_nextent( int n )
 //      return &g_edicts[syscall( G_NEXTENT,NUM_FOR_EDICT(ed))];
 }
 
-void trap_makestatic( gedict_t * ed )
+void trap_makestatic( int edn )
 {
-	syscall( G_MAKESTATIC, EDICT_TO_PROG( ed ) );
+	syscall( G_MAKESTATIC, edn );
 }
 
-void trap_setspawnparam( gedict_t * ed )
+void trap_setspawnparam( int edn )
 {
-	syscall( G_SETSPAWNPARAMS, EDICT_TO_PROG( ed ) );
+	syscall( G_SETSPAWNPARAMS, edn );
 }
 
 void trap_changelevel( char *name )
@@ -186,19 +200,19 @@ void trap_changelevel( char *name )
 
 int trap_multicast( float origin_x, float origin_y, float origin_z, int to )
 {
-	return syscall( G_MULTICAST, ( double ) origin_x, ( double ) origin_y,
-			( double ) origin_z, to );
+	return syscall( G_MULTICAST, PASSFLOAT( origin_x), PASSFLOAT( origin_y),
+			PASSFLOAT( origin_z), to );
 }
 
 
-void trap_logfrag( gedict_t * killer, gedict_t * killee )
+void trap_logfrag( int killer, int killee )
 {
-	syscall( G_LOGFRAG, NUM_FOR_EDICT( killer ), NUM_FOR_EDICT( killee ) );
+	syscall( G_LOGFRAG,  killer , killee  );
 }
 
-void trap_infokey( gedict_t * ed, char *key, char *valbuff, int sizebuff )
+void trap_infokey( int edn, char *key, char *valbuff, int sizebuff )
 {
-	syscall( G_GETINFOKEY, NUM_FOR_EDICT( ed ), key, valbuff, sizebuff );
+	syscall( G_GETINFOKEY, edn, (int)key, (int)valbuff, sizebuff );
 }
 
 void trap_WriteByte( int to, int data )
@@ -223,22 +237,22 @@ void trap_WriteLong( int to, int data )
 
 void trap_WriteAngle( int to, float data )
 {
-	syscall( G_WRITEANGLE, to, ( double ) data );
+	syscall( G_WRITEANGLE, to, PASSFLOAT( data ));
 }
 
 void trap_WriteCoord( int to, float data )
 {
-	syscall( G_WRITECOORD, to, ( double ) data );
+	syscall( G_WRITECOORD, to, PASSFLOAT( data ));
 }
 
 void trap_WriteString( int to, char *data )
 {
-	syscall( G_WRITESTRING, to, data );
+	syscall( G_WRITESTRING, to, (int)data );
 }
 
-void trap_WriteEntity( int to, gedict_t * ed )
+void trap_WriteEntity( int to, int edn )
 {
-	syscall( G_WRITEENTITY, to, NUM_FOR_EDICT( ed ) );
+	syscall( G_WRITEENTITY, to, edn );
 }
 
 void trap_FlushSignon()
@@ -247,9 +261,9 @@ void trap_FlushSignon()
 }
 
 
-void trap_disableupdates( gedict_t * ed, float time )
+void trap_disableupdates( int edn, float time )
 {
-	syscall( G_DISABLEUPDATES, NUM_FOR_EDICT( ed ), ( double ) time );
+	syscall( G_DISABLEUPDATES, edn , PASSFLOAT( time ));
 }
 
 int trap_CmdArgc()
@@ -258,5 +272,5 @@ int trap_CmdArgc()
 }
 void trap_CmdArgv( int arg, char *valbuff, int sizebuff )
 {
-	syscall( G_CMD_ARGV, arg, valbuff, sizebuff );
+	syscall( G_CMD_ARGV, arg, (int)valbuff, sizebuff );
 }

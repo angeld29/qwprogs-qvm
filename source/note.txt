@@ -1,2 +1,16 @@
-need set g_globalvars.newmis
+don't use double in mod (qvm don't support it)
+
+do not modify progdefs.h and g_public.h
+
+
+use PROG_TO_EDICT ,EDICT_TO_PROG  for work with (gedict_t)->s.v entity fields (like .owner,.enemy)
+
+map entites describes in tables :
+field_t         fields[]
+spawn_t         spawns[]
+in g_spawn.c
+
+for missiles spawn need set g_globalvars.newmis
+
+
 

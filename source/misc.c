@@ -116,8 +116,8 @@ Default style is 0
 void SP_light_globe()
 {
 	trap_precache_model( "progs/s_light.spr" );
-	trap_setmodel( self, "progs/s_light.spr" );
-	trap_makestatic( self );
+	setmodel( self, "progs/s_light.spr" );
+	makestatic( self );
 }
 
 void FireAmbient()
@@ -136,9 +136,9 @@ Default style is 0
 void SP_light_torch_small_walltorch()
 {
 	trap_precache_model( "progs/flame.mdl" );
-	trap_setmodel( self, "progs/flame.mdl" );
+	setmodel( self, "progs/flame.mdl" );
 	FireAmbient( self );
-	trap_makestatic( self );
+	makestatic( self );
 }
 
 /*QUAKED light_flame_large_yellow (0 1 0) (-10 -10 -12) (12 12 18)
@@ -147,10 +147,10 @@ Large yellow flame ball
 void SP_light_flame_large_yellow()
 {
 	trap_precache_model( "progs/flame2.mdl" );
-	trap_setmodel( self, "progs/flame2.mdl" );
+	setmodel( self, "progs/flame2.mdl" );
 	self->s.v.frame = 1;
 	FireAmbient( self );
-	trap_makestatic( self );
+	makestatic( self );
 }
 
 /*QUAKED light_flame_small_yellow (0 1 0) (-8 -8 -8) (8 8 8) START_OFF
@@ -159,9 +159,9 @@ Small yellow flame ball
 void SP_light_flame_small_yellow()
 {
 	trap_precache_model( "progs/flame2.mdl" );
-	trap_setmodel( self, "progs/flame2.mdl" );
+	setmodel( self, "progs/flame2.mdl" );
 	FireAmbient( self );
-	trap_makestatic( self );
+	makestatic( self );
 }
 
 /*QUAKED light_flame_small_white (0 1 0) (-10 -10 -40) (10 10 40) START_OFF
@@ -170,9 +170,9 @@ Small white flame ball
 void SP_light_flame_small_white()
 {
 	trap_precache_model( "progs/flame2.mdl" );
-	trap_setmodel( self, "progs/flame2.mdl" );
+	setmodel( self, "progs/flame2.mdl" );
 	FireAmbient( self );
-	trap_makestatic( self );
+	makestatic( self );
 }
 
 //============================================================================
@@ -209,9 +209,9 @@ void fire_fly()
 
 	fireball->s.v.classname = "fireball";
 
-	trap_setmodel( fireball, "progs/lavaball.mdl" );
-	trap_setsize( fireball, 0, 0, 0, 0, 0, 0 );
-	trap_setorigin( fireball, PASSVEC3( self->s.v.origin ) );
+	setmodel( fireball, "progs/lavaball.mdl" );
+	setsize( fireball, 0, 0, 0, 0, 0, 0 );
+	setorigin( fireball, PASSVEC3( self->s.v.origin ) );
 
 	fireball->s.v.nextthink = g_globalvars.time + 5;
 	fireball->s.v.think = ( func_t ) SUB_Remove;
@@ -263,8 +263,8 @@ void SP_misc_explobox()
 	self->s.v.movetype = MOVETYPE_NONE;
 
 	trap_precache_model( "maps/b_explob.bsp" );
-	trap_setmodel( self, "maps/b_explob.bsp" );
-	trap_setsize( self, 0, 0, 0, 32, 32, 64 );
+	setmodel( self, "maps/b_explob.bsp" );
+	setsize( self, 0, 0, 0, 32, 32, 64 );
 	trap_precache_sound( "weapons/r_exp3.wav" );
 
 	self->s.v.health = 20;
@@ -273,7 +273,7 @@ void SP_misc_explobox()
 
 	self->s.v.origin[2] += 2;
 	oldz = self->s.v.origin[2];
-	trap_droptofloor( self );
+	droptofloor( self );
 	if ( oldz - self->s.v.origin[2] > 250 )
 	{
 		G_Printf( "item fell out of level at '%f %f %f'\n",
@@ -297,8 +297,8 @@ void SP_misc_explobox2()
 	self->s.v.movetype = MOVETYPE_NONE;
 
 	trap_precache_model( "maps/b_exbox2.bsp" );
-	trap_setmodel( self, "maps/b_exbox2.bsp" );
-	trap_setsize( self, 0, 0, 0, 32, 32, 32 );
+	setmodel( self, "maps/b_exbox2.bsp" );
+	setsize( self, 0, 0, 0, 32, 32, 32 );
 	trap_precache_sound( "weapons/r_exp3.wav" );
 
 	self->s.v.health = 20;
@@ -308,7 +308,7 @@ void SP_misc_explobox2()
 	self->s.v.origin[2] += 2;
 	oldz = self->s.v.origin[2];
 
-	trap_droptofloor( self );
+	droptofloor( self );
 
 	if ( oldz - self->s.v.origin[2] > 250 )
 	{
@@ -336,7 +336,7 @@ void Laser_Touch()
 		return;
 	}
 
-	trap_sound( self, CHAN_WEAPON, "enforcer/enfstop.wav", 1, ATTN_STATIC );
+	sound( self, CHAN_WEAPON, "enforcer/enfstop.wav", 1, ATTN_STATIC );
 	
 	normalize( self->s.v.velocity, org );
 	VectorScale( org, 8, org );
@@ -369,7 +369,7 @@ void LaunchLaser( vec3_t org, vec3_t vec )
 	//vec3_t  vec;
 
 	if ( !strcmp( self->s.v.classname, "monster_enforcer" ) )
-		trap_sound( self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM );
+		sound( self, CHAN_WEAPON, "enforcer/enfire.wav", 1, ATTN_NORM );
 
 	normalize( vec, vec );
 
@@ -380,10 +380,10 @@ void LaunchLaser( vec3_t org, vec3_t vec )
 	newmis->s.v.solid = SOLID_BBOX;
 	newmis->s.v.effects = EF_DIMLIGHT;
 
-	trap_setmodel( newmis, "progs/laser.mdl" );
-	trap_setsize( newmis, 0, 0, 0, 0, 0, 0 );
+	setmodel( newmis, "progs/laser.mdl" );
+	setsize( newmis, 0, 0, 0, 0, 0, 0 );
 
-	trap_setorigin( newmis, PASSVEC3( org ) );
+	setorigin( newmis, PASSVEC3( org ) );
 
 	//newmis->s.v.velocity = vec * 600;
 	VectorScale( vec, 600, newmis->s.v.velocity );
@@ -411,11 +411,11 @@ void spikeshooter_use()
 {
 	if ( ( int ) ( self->s.v.spawnflags ) & SPAWNFLAG_LASER )
 	{
-		trap_sound( self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM );
+		sound( self, CHAN_VOICE, "enforcer/enfire.wav", 1, ATTN_NORM );
 		LaunchLaser( self->s.v.origin, self->s.v.movedir );
 	} else
 	{
-		trap_sound( self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM );
+		sound( self, CHAN_VOICE, "weapons/spike2.wav", 1, ATTN_NORM );
 		launch_spike( self->s.v.origin, self->s.v.movedir );
 		VectorScale( self->s.v.movedir, 500,
 			     PROG_TO_EDICT( g_globalvars.newmis )->s.v.velocity );
@@ -498,8 +498,8 @@ void make_bubbles()
 	gedict_t       *bubble;
 
 	bubble = spawn();
-	trap_setmodel( bubble, "progs/s_bubble.spr" );
-	trap_setorigin( bubble, PASSVEC3( self->s.v.origin ) );
+	setmodel( bubble, "progs/s_bubble.spr" );
+	setorigin( bubble, PASSVEC3( self->s.v.origin ) );
 	bubble->s.v.movetype = MOVETYPE_NOCLIP;
 	bubble->s.v.solid = SOLID_NOT;
 
@@ -511,7 +511,7 @@ void make_bubbles()
 	bubble->s.v.frame = 0;
 	bubble->cnt = 0;
 
-	trap_setsize( bubble, -8, -8, -8, 8, 8, 8 );
+	setsize( bubble, -8, -8, -8, 8, 8, 8 );
 
 	self->s.v.nextthink = g_globalvars.time + g_random() + 0.5;
 	self->s.v.think = ( func_t ) make_bubbles;
@@ -522,8 +522,8 @@ void bubble_split()
 	gedict_t       *bubble;
 
 	bubble = spawn();
-	trap_setmodel( bubble, "progs/s_bubble.spr" );
-	trap_setorigin( bubble, PASSVEC3( self->s.v.origin ) );
+	setmodel( bubble, "progs/s_bubble.spr" );
+	setorigin( bubble, PASSVEC3( self->s.v.origin ) );
 
 	bubble->s.v.movetype = MOVETYPE_NOCLIP;
 	bubble->s.v.solid = SOLID_NOT;
@@ -537,7 +537,7 @@ void bubble_split()
 	bubble->s.v.frame = 1;
 	bubble->cnt = 10;
 
-	trap_setsize( bubble, -8, -8, -8, 8, 8, 8 );
+	setsize( bubble, -8, -8, -8, 8, 8, 8 );
 
 	self->s.v.frame = 1;
 	self->cnt = 10;
@@ -608,7 +608,7 @@ void viewthing()
 	self->s.v.movetype = MOVETYPE_NONE;
 	self->s.v.solid = SOLID_NOT;
 	trap_precache_model( "progs/player.mdl" );
-	trap_setmodel( self, "progs/player.mdl" );
+	setmodel( self, "progs/player.mdl" );
 }
 
 
@@ -635,7 +635,7 @@ void SP_func_wall()
 	self->s.v.movetype = MOVETYPE_PUSH;	// so it doesn't get pushed by anything
 	self->s.v.solid = SOLID_BSP;
 	self->s.v.use = ( func_t ) func_wall_use;
-	trap_setmodel( self, self->s.v.model );
+	setmodel( self, self->s.v.model );
 }
 
 
@@ -647,8 +647,8 @@ void SP_func_illusionary()
 	SetVector( self->s.v.angles, 0, 0, 0 );
 	self->s.v.movetype = MOVETYPE_NONE;
 	self->s.v.solid = SOLID_NOT;
-	trap_setmodel( self, self->s.v.model );
-	trap_makestatic( self );
+	setmodel( self, self->s.v.model );
+	makestatic( self );
 }
 
 /*QUAKED func_episodegate (0 .5 .8) ? E1 E2 E3 E4
@@ -664,7 +664,7 @@ void SP_func_episodegate()
 	self->s.v.movetype = MOVETYPE_PUSH;	// so it doesn't get pushed by anything
 	self->s.v.solid = SOLID_BSP;
 	self->s.v.use = ( func_t ) func_wall_use;
-	trap_setmodel( self, self->s.v.model );
+	setmodel( self, self->s.v.model );
 }
 
 /*QUAKED func_bossgate (0 .5 .8) ?
@@ -678,7 +678,7 @@ void SP_func_bossgate()
 	self->s.v.movetype = MOVETYPE_PUSH;	// so it doesn't get pushed by anything
 	self->s.v.solid = SOLID_BSP;
 	self->s.v.use = ( func_t ) func_wall_use;
-	trap_setmodel( self, self->s.v.model );
+	setmodel( self, self->s.v.model );
 }
 
 //============================================================================
@@ -768,13 +768,13 @@ void SP_ambient_swamp2()
 void noise_think()
 {
 	self->s.v.nextthink = g_globalvars.time + 0.5;
-	trap_sound( self, 1, "enforcer/enfire.wav", 1, ATTN_NORM );
-	trap_sound( self, 2, "enforcer/enfstop.wav", 1, ATTN_NORM );
-	trap_sound( self, 3, "enforcer/sight1.wav", 1, ATTN_NORM );
-	trap_sound( self, 4, "enforcer/sight2.wav", 1, ATTN_NORM );
-	trap_sound( self, 5, "enforcer/sight3.wav", 1, ATTN_NORM );
-	trap_sound( self, 6, "enforcer/sight4.wav", 1, ATTN_NORM );
-	trap_sound( self, 7, "enforcer/pain1.wav", 1, ATTN_NORM );
+	sound( self, 1, "enforcer/enfire.wav", 1, ATTN_NORM );
+	sound( self, 2, "enforcer/enfstop.wav", 1, ATTN_NORM );
+	sound( self, 3, "enforcer/sight1.wav", 1, ATTN_NORM );
+	sound( self, 4, "enforcer/sight2.wav", 1, ATTN_NORM );
+	sound( self, 5, "enforcer/sight3.wav", 1, ATTN_NORM );
+	sound( self, 6, "enforcer/sight4.wav", 1, ATTN_NORM );
+	sound( self, 7, "enforcer/pain1.wav", 1, ATTN_NORM );
 }
 
 /*QUAKED misc_noisemaker (1 0.5 0) (-10 -10 -10) (10 10 10)

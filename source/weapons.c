@@ -38,7 +38,7 @@ void W_FireAxe()
 	VectorAdd( dest, source, dest )
 	//source = self->s.v.origin + '0 0 16';
 	
-	trap_traceline( PASSVEC3( source ), PASSVEC3( dest ), false, self );
+	traceline( PASSVEC3( source ), PASSVEC3( dest ), false, self );
 	if ( g_globalvars.trace_fraction == 1.0 )
 		return;
 
@@ -58,7 +58,7 @@ void W_FireAxe()
 				  20 );
 	} else
 	{			// hit wall
-		trap_sound( self, CHAN_WEAPON, "player/axhit2.wav", 1, ATTN_NORM );
+		sound( self, CHAN_WEAPON, "player/axhit2.wav", 1, ATTN_NORM );
 
 		trap_WriteByte( MSG_MULTICAST, SVC_TEMPENTITY );
 		trap_WriteByte( MSG_MULTICAST, TE_GUNSHOT );
@@ -132,9 +132,9 @@ void SpawnMeatSpray( vec3_t org, vec3_t vel )
 	missile->s.v.nextthink = g_globalvars.time + 1;
 	missile->s.v.think = ( func_t ) SUB_Remove;
 
-	trap_setmodel( missile, "progs/zom_gib.mdl" );
-	trap_setsize( missile, 0, 0, 0, 0, 0, 0 );
-	trap_setorigin( missile, PASSVEC3( org ) );
+	setmodel( missile, "progs/zom_gib.mdl" );
+	setsize( missile, 0, 0, 0, 0, 0, 0 );
+	setorigin( missile, PASSVEC3( org ) );
 }
 
 /*
@@ -302,7 +302,7 @@ void FireBullets( float shotcount, vec3_t dir, float spread_x, float spread_y,
 
 	ClearMultiDamage();
 
-	trap_traceline( PASSVEC3( src ), src[0] + dir[0] * 2048, src[1] + dir[1] * 2048,
+	traceline( PASSVEC3( src ), src[0] + dir[0] * 2048, src[1] + dir[1] * 2048,
 			src[2] + dir[2] * 2048, false, self );
 	VectorScale( dir, 4, tmp );
 	VectorSubtract( g_globalvars.trace_endpos, tmp, puff_org );	// puff_org = trace_endpos - dir*4;
@@ -317,7 +317,7 @@ void FireBullets( float shotcount, vec3_t dir, float spread_x, float spread_y,
 //  direction = dir + crandom()*spread[0]*v_right + crandom()*spread[1]*v_up;
 		VectorScale( direction, 2048, tmp );
 		VectorAdd( src, tmp, tmp );
-		trap_traceline( PASSVEC3( src ), PASSVEC3( tmp ), false, self );
+		traceline( PASSVEC3( src ), PASSVEC3( tmp ), false, self );
 		if ( g_globalvars.trace_fraction != 1.0 )
 			TraceAttack( 4, direction );
 
@@ -336,7 +336,7 @@ void W_FireShotgun()
 {
 	vec3_t          dir;
 
-	trap_sound( self, CHAN_WEAPON, "weapons/guncock.wav", 1, ATTN_NORM );
+	sound( self, CHAN_WEAPON, "weapons/guncock.wav", 1, ATTN_NORM );
 
 	g_globalvars.msg_entity = EDICT_TO_PROG( self );
 
@@ -364,7 +364,7 @@ void W_FireSuperShotgun()
 		W_FireShotgun();
 		return;
 	}
-	trap_sound( self, CHAN_WEAPON, "weapons/shotgn2.wav", 1, ATTN_NORM );
+	sound( self, CHAN_WEAPON, "weapons/shotgn2.wav", 1, ATTN_NORM );
 	g_globalvars.msg_entity = EDICT_TO_PROG( self );
 
 	trap_WriteByte( MSG_ONE, SVC_BIGKICK );
@@ -432,7 +432,7 @@ void T_MissileTouch()
 
 	T_RadiusDamage( self, PROG_TO_EDICT( self->s.v.owner ), 120, other, "rocket" );
 
-//  trap_sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
+//  sound (self, CHAN_WEAPON, "weapons/r_exp3.wav", 1, ATTN_NORM);
 	normalize( self->s.v.velocity, tmp );
 	VectorScale( tmp, -8, tmp );
 	VectorAdd( self->s.v.origin, tmp, self->s.v.origin )
@@ -459,7 +459,7 @@ void W_FireRocket()
 		self->s.v.currentammo = self->s.v.ammo_rockets =
 		    self->s.v.ammo_rockets - 1;
 
-	trap_sound( self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM );
+	sound( self, CHAN_WEAPON, "weapons/sgun1.wav", 1, ATTN_NORM );
 
 	g_globalvars.msg_entity = EDICT_TO_PROG( self );
 	trap_WriteByte( MSG_ONE, SVC_SMALLKICK );
@@ -486,11 +486,11 @@ void W_FireRocket()
 	newmis->s.v.think = ( func_t ) SUB_Remove;
 	newmis->s.v.classname = "rocket";
 
-	trap_setmodel( newmis, "progs/missile.mdl" );
-	trap_setsize( newmis, 0, 0, 0, 0, 0, 0 );
+	setmodel( newmis, "progs/missile.mdl" );
+	setsize( newmis, 0, 0, 0, 0, 0, 0 );
 
-// trap_setorigin (newmis, self->s.v.origin + v_forward*8 + '0 0 16');
-	trap_setorigin( newmis, self->s.v.origin[0] + g_globalvars.v_forward[0] * 8,
+// setorigin (newmis, self->s.v.origin + v_forward*8 + '0 0 16');
+	setorigin( newmis, self->s.v.origin[0] + g_globalvars.v_forward[0] * 8,
 			self->s.v.origin[1] + g_globalvars.v_forward[1] * 8,
 			self->s.v.origin[2] + g_globalvars.v_forward[2] * 8 + 16 );
 }
@@ -534,7 +534,7 @@ void LightningDamage( vec3_t p1, vec3_t p2, gedict_t * from, float damage )
 
 	e1 = e2 = world;
 
-	trap_traceline( PASSVEC3( p1 ), PASSVEC3( p2 ), false, self );
+	traceline( PASSVEC3( p1 ), PASSVEC3( p2 ), false, self );
 
 	if ( PROG_TO_EDICT( g_globalvars.trace_ent )->s.v.takedamage )
 	{
@@ -548,8 +548,8 @@ void LightningDamage( vec3_t p1, vec3_t p2, gedict_t * from, float damage )
 	}
 	e1 = PROG_TO_EDICT( g_globalvars.trace_ent );
 
-	//trap_traceline (p1 + f, p2 + f, FALSE, self);
-	trap_traceline( p1[0] + f[0], p1[1] + f[1], p1[2] + f[2], p2[0] + f[0],
+	//traceline (p1 + f, p2 + f, FALSE, self);
+	traceline( p1[0] + f[0], p1[1] + f[1], p1[2] + f[2], p2[0] + f[0],
 			p2[1] + f[1], p2[2] + f[2], false, self );
 	if ( PROG_TO_EDICT( g_globalvars.trace_ent ) != e1
 	     && PROG_TO_EDICT( g_globalvars.trace_ent )->s.v.takedamage )
@@ -558,7 +558,7 @@ void LightningDamage( vec3_t p1, vec3_t p2, gedict_t * from, float damage )
 	}
 	e2 = PROG_TO_EDICT( g_globalvars.trace_ent );
 
-	trap_traceline( p1[0] - f[0], p1[1] - f[1], p1[2] - f[2], p2[0] - f[0],
+	traceline( p1[0] - f[0], p1[1] - f[1], p1[2] - f[2], p2[0] - f[0],
 			p2[1] - f[1], p2[2] - f[2], false, self );
 	if ( PROG_TO_EDICT( g_globalvars.trace_ent ) != e1
 	     && PROG_TO_EDICT( g_globalvars.trace_ent ) != e2
@@ -610,7 +610,7 @@ void W_FireLightning()
 
 	if ( self->t_width < g_globalvars.time )
 	{
-		trap_sound( self, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM );
+		sound( self, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM );
 		self->t_width = g_globalvars.time + 0.6;
 	}
 	g_globalvars.msg_entity = EDICT_TO_PROG( self );
@@ -623,13 +623,13 @@ void W_FireLightning()
 	org[2] += 16;
 
 
-	trap_traceline( PASSVEC3( org ), org[0] + g_globalvars.v_forward[0] * 600,
+	traceline( PASSVEC3( org ), org[0] + g_globalvars.v_forward[0] * 600,
 			org[1] + g_globalvars.v_forward[1] * 600,
 			org[2] + g_globalvars.v_forward[2] * 600, true, self );
 
 	trap_WriteByte( MSG_MULTICAST, SVC_TEMPENTITY );
 	trap_WriteByte( MSG_MULTICAST, TE_LIGHTNING2 );
-	trap_WriteEntity( MSG_MULTICAST, self );
+	WriteEntity( MSG_MULTICAST, self );
 	trap_WriteCoord( MSG_MULTICAST, org[0] );
 	trap_WriteCoord( MSG_MULTICAST, org[1] );
 	trap_WriteCoord( MSG_MULTICAST, org[2] );
@@ -675,7 +675,7 @@ void GrenadeTouch()
 		GrenadeExplode();
 		return;
 	}
-	trap_sound( self, CHAN_WEAPON, "weapons/bounce.wav", 1, ATTN_NORM );	// bounce sound
+	sound( self, CHAN_WEAPON, "weapons/bounce.wav", 1, ATTN_NORM );	// bounce sound
 	if ( self->s.v.velocity[0] == 0 && self->s.v.velocity[1] == 0
 	     && self->s.v.velocity[2] == 0 )
 		VectorClear( self->s.v.avelocity );
@@ -692,7 +692,7 @@ void W_FireGrenade()
 		self->s.v.currentammo = self->s.v.ammo_rockets =
 		    self->s.v.ammo_rockets - 1;
 
-	trap_sound( self, CHAN_WEAPON, "weapons/grenade.wav", 1, ATTN_NORM );
+	sound( self, CHAN_WEAPON, "weapons/grenade.wav", 1, ATTN_NORM );
 
 	g_globalvars.msg_entity = EDICT_TO_PROG( self );
 
@@ -749,9 +749,9 @@ void W_FireGrenade()
 
 	newmis->s.v.think = ( func_t ) GrenadeExplode;
 
-	trap_setmodel( newmis, "progs/grenade.mdl" );
-	trap_setsize( newmis, 0, 0, 0, 0, 0, 0 );
-	trap_setorigin( newmis, PASSVEC3( self->s.v.origin ) );
+	setmodel( newmis, "progs/grenade.mdl" );
+	setsize( newmis, 0, 0, 0, 0, 0, 0 );
+	setorigin( newmis, PASSVEC3( self->s.v.origin ) );
 }
 
 //=============================================================================
@@ -782,9 +782,9 @@ void launch_spike( vec3_t org, vec3_t dir )
 	newmis->s.v.classname = "spike";
 	newmis->s.v.think = ( func_t ) SUB_Remove;
 	newmis->s.v.nextthink = g_globalvars.time + 6;
-	trap_setmodel( newmis, "progs/spike.mdl" );
-	trap_setsize( newmis, 0, 0, 0, 0, 0, 0 );
-	trap_setorigin( newmis, PASSVEC3( org ) );
+	setmodel( newmis, "progs/spike.mdl" );
+	setsize( newmis, 0, 0, 0, 0, 0, 0 );
+	setorigin( newmis, PASSVEC3( org ) );
 	VectorScale( dir, 1000, newmis->s.v.velocity );
 	//newmis->s.v.velocity = dir * 1000;
 }
@@ -881,7 +881,7 @@ void W_FireSuperSpikes()
 
 // gedict_t*    old;
 
-	trap_sound( self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM );
+	sound( self, CHAN_WEAPON, "weapons/spike2.wav", 1, ATTN_NORM );
 	self->attack_finished = g_globalvars.time + 0.2;
 	if ( deathmatch != 4 )
 		self->s.v.currentammo = self->s.v.ammo_nails = self->s.v.ammo_nails - 2;
@@ -891,8 +891,8 @@ void W_FireSuperSpikes()
 	tmp[2] += 16;
 	launch_spike( tmp, dir );
 	newmis->s.v.touch = ( func_t ) superspike_touch;
-	trap_setmodel( newmis, "progs/s_spike.mdl" );
-	trap_setsize( newmis, 0, 0, 0, 0, 0, 0 );
+	setmodel( newmis, "progs/s_spike.mdl" );
+	setsize( newmis, 0, 0, 0, 0, 0, 0 );
 	g_globalvars.msg_entity = EDICT_TO_PROG( self );
 	trap_WriteByte( MSG_ONE, SVC_SMALLKICK );
 }
@@ -918,7 +918,7 @@ void W_FireSpikes( float ox )
 		return;
 	}
 
-	trap_sound( self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM );
+	sound( self, CHAN_WEAPON, "weapons/rocket1i.wav", 1, ATTN_NORM );
 	self->attack_finished = g_globalvars.time + 0.2;
 	if ( deathmatch != 4 )
 		self->s.v.currentammo = self->s.v.ammo_nails = self->s.v.ammo_nails - 1;
@@ -1084,7 +1084,7 @@ void W_Attack()
 	{
 	case IT_AXE:
 		self->attack_finished = g_globalvars.time + 0.5;
-		trap_sound( self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM );
+		sound( self, CHAN_WEAPON, "weapons/ax1.wav", 1, ATTN_NORM );
 		r = g_random();
 		if ( r < 0.25 )
 			player_axe1();
@@ -1130,7 +1130,7 @@ void W_Attack()
 
 	case IT_LIGHTNING:
 		self->attack_finished = g_globalvars.time + 0.1;
-		trap_sound( self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM );
+		sound( self, CHAN_AUTO, "weapons/lstart.wav", 1, ATTN_NORM );
 		player_light1();
 		break;
 	}
@@ -1473,7 +1473,7 @@ void SuperDamageSound()
 		if ( self->super_sound < g_globalvars.time )
 		{
 			self->super_sound = g_globalvars.time + 1;
-			trap_sound( self, CHAN_BODY, "items/damage3.wav", 1, ATTN_NORM );
+			sound( self, CHAN_BODY, "items/damage3.wav", 1, ATTN_NORM );
 		}
 	}
 	return;

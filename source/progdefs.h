@@ -115,8 +115,6 @@ typedef struct
 	float	ammo_rockets;
 	float	ammo_cells;
 	float	items;
-//hack
-//	int	items;
 	float	takedamage;
 	int	chain;
 	float	deadflag;

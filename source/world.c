@@ -32,8 +32,8 @@ void CopyToBodyQue( gedict_t * ent )
 	bodyque[bodyque_head]->s.v.movetype = ent->s.v.movetype;
 	bodyque[bodyque_head]->s.v.flags = 0;
 
-	trap_setorigin( bodyque[bodyque_head], PASSVEC3( ent->s.v.origin ) );
-	trap_setsize( bodyque[bodyque_head], PASSVEC3( ent->s.v.mins ),
+	setorigin( bodyque[bodyque_head], PASSVEC3( ent->s.v.origin ) );
+	setsize( bodyque[bodyque_head], PASSVEC3( ent->s.v.mins ),
 		      PASSVEC3( ent->s.v.maxs ) );
 
 	if ( ++bodyque_head >= MAX_BODYQUE )

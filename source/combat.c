@@ -47,7 +47,7 @@ qboolean CanDamage( gedict_t * targ, gedict_t * inflictor )
 	if ( targ->s.v.movetype == MOVETYPE_PUSH )
 	{
 
-		trap_traceline( PASSVEC3( inflictor->s.v.origin ),
+		traceline( PASSVEC3( inflictor->s.v.origin ),
 				0.5 * ( targ->s.v.absmin[0] + targ->s.v.absmax[0] ),
 				0.5 * ( targ->s.v.absmin[1] + targ->s.v.absmax[1] ),
 				0.5 * ( targ->s.v.absmin[2] + targ->s.v.absmax[2] ),
@@ -62,30 +62,30 @@ qboolean CanDamage( gedict_t * targ, gedict_t * inflictor )
 		return false;
 	}
 
-	trap_traceline( PASSVEC3( inflictor->s.v.origin ), PASSVEC3( targ->s.v.origin ),
+	traceline( PASSVEC3( inflictor->s.v.origin ), PASSVEC3( targ->s.v.origin ),
 			true, self );
 	if ( g_globalvars.trace_fraction == 1 )
 		return true;
 
-	trap_traceline( PASSVEC3( inflictor->s.v.origin ),
+	traceline( PASSVEC3( inflictor->s.v.origin ),
 			targ->s.v.origin[0] + 15, targ->s.v.origin[1] + 15,
 			targ->s.v.origin[2] + 0, true, self );
 	if ( g_globalvars.trace_fraction == 1 )
 		return true;
 
-	trap_traceline( PASSVEC3( inflictor->s.v.origin ),
+	traceline( PASSVEC3( inflictor->s.v.origin ),
 			targ->s.v.origin[0] - 15, targ->s.v.origin[1] - 15,
 			targ->s.v.origin[2] + 0, true, self );
 	if ( g_globalvars.trace_fraction == 1 )
 		return true;
 
-	trap_traceline( PASSVEC3( inflictor->s.v.origin ),
+	traceline( PASSVEC3( inflictor->s.v.origin ),
 			targ->s.v.origin[0] - 15, targ->s.v.origin[1] + 15,
 			targ->s.v.origin[2] + 0, true, self );
 	if ( g_globalvars.trace_fraction == 1 )
 		return true;
 
-	trap_traceline( PASSVEC3( inflictor->s.v.origin ),
+	traceline( PASSVEC3( inflictor->s.v.origin ),
 			targ->s.v.origin[0] + 15, targ->s.v.origin[1] - 15,
 			targ->s.v.origin[2] + 0, true, self );
 	if ( g_globalvars.trace_fraction == 1 )
@@ -254,15 +254,15 @@ void T_Damage( gedict_t * targ, gedict_t * inflictor, gedict_t * attacker, float
 	{
 		if ( self->invincible_sound < g_globalvars.time )
 		{
-			trap_sound( targ, CHAN_ITEM, "items/protect3.wav", 1, ATTN_NORM );
+			sound( targ, CHAN_ITEM, "items/protect3.wav", 1, ATTN_NORM );
 			self->invincible_sound = g_globalvars.time + 2;
 		}
 		return;
 	}
 // team play damage avoidance
 //ZOID 12-13-96: self.team doesn't work in QW.  Use keys
-	trap_infokey( attacker, "team", attackerteam, sizeof( attackerteam ) );
-	trap_infokey( targ, "team", targteam, sizeof( targteam ) );
+	infokey( attacker, "team", attackerteam, sizeof( attackerteam ) );
+	infokey( targ, "team", targteam, sizeof( targteam ) );
 
 	if ( ( teamplay == 1 ) && !strcmp( targteam, attackerteam ) &&
 	     !strcmp( attacker->s.v.classname, "player" ) && strcmp( attackerteam, "" ) &&

@@ -3,8 +3,8 @@ void SUB_regen()
 {
 	self->s.v.model = self->mdl;	// restore original model
 	self->s.v.solid = SOLID_TRIGGER;	// allow it to be touched again
-	trap_sound( self, CHAN_VOICE, "items/itembk2.wav", 1, ATTN_NORM );	// play respawn sound
-	trap_setorigin( self, PASSVEC3( self->s.v.origin ) );
+	sound( self, CHAN_VOICE, "items/itembk2.wav", 1, ATTN_NORM );	// play respawn sound
+	setorigin( self, PASSVEC3( self->s.v.origin ) );
 }
 
 
@@ -23,8 +23,8 @@ void q_touch()
 
 	self->mdl = self->s.v.model;
 
-	trap_sound( other, CHAN_VOICE, self->s.v.noise, 1, ATTN_NORM );
-	trap_stuffcmd( other, "bf\n" );
+	sound( other, CHAN_VOICE, self->s.v.noise, 1, ATTN_NORM );
+	stuffcmd( other, "bf\n" );
 
 	self->s.v.solid = SOLID_NOT;
 	other->s.v.items = ( ( int ) other->s.v.items ) | IT_QUAD;
@@ -72,8 +72,8 @@ void DropQuad( float timeleft )
 	item->s.v.movetype = MOVETYPE_TOSS;
 	item->s.v.noise = "items/damage.wav";
 
-	trap_setmodel( item, "progs/quaddama.mdl" );
-	trap_setsize( item, -16, -16, -24, 16, 16, 32 );
+	setmodel( item, "progs/quaddama.mdl" );
+	setsize( item, -16, -16, -24, 16, 16, 32 );
 
 	item->cnt = g_globalvars.time + timeleft;
 	item->s.v.touch = ( func_t ) q_touch;
@@ -96,8 +96,8 @@ void r_touch()
 
 	self->mdl = self->s.v.model;
 
-	trap_sound( other, CHAN_VOICE, self->s.v.noise, 1, ATTN_NORM );
-	trap_stuffcmd( other, "bf\n" );
+	sound( other, CHAN_VOICE, self->s.v.noise, 1, ATTN_NORM );
+	stuffcmd( other, "bf\n" );
 
 	self->s.v.solid = SOLID_NOT;
 	other->s.v.items = ( ( int ) other->s.v.items ) | IT_INVISIBILITY;
@@ -139,8 +139,8 @@ void DropRing( float timeleft )
 	item->s.v.movetype = MOVETYPE_TOSS;
 	item->s.v.noise = "items/inv1.wav";
 
-	trap_setmodel( item, "progs/invisibl.mdl" );
-	trap_setsize( item, -16, -16, -24, 16, 16, 32 );
+	setmodel( item, "progs/invisibl.mdl" );
+	setsize( item, -16, -16, -24, 16, 16, 32 );
 
 	item->cnt = g_globalvars.time + timeleft;
 	item->s.v.touch = ( func_t ) r_touch;
@@ -158,7 +158,7 @@ void PlaceItem()
 	SetVector( self->s.v.velocity, 0, 0, 0 );
 	self->s.v.origin[2] += 6;
 
-	if ( !trap_droptofloor( self ) )
+	if ( !droptofloor( self ) )
 	{
 		G_Printf( "Bonus item fell out of level at  '%f %f %f'\n",
 			  self->s.v.origin[0], self->s.v.origin[1], self->s.v.origin[2] );
@@ -228,7 +228,7 @@ void SP_item_health()
 	{
 		trap_precache_model( "maps/b_bh10.bsp" );
 		trap_precache_sound( "items/r_item1.wav" );
-		trap_setmodel( self, "maps/b_bh10.bsp" );
+		setmodel( self, "maps/b_bh10.bsp" );
 		self->s.v.noise = "items/r_item1.wav";
 		self->healamount = 15;
 		self->healtype = 0;
@@ -238,7 +238,7 @@ void SP_item_health()
 		{
 			trap_precache_model( "maps/b_bh100.bsp" );
 			trap_precache_sound( "items/r_item2.wav" );
-			trap_setmodel( self, "maps/b_bh100.bsp" );
+			setmodel( self, "maps/b_bh100.bsp" );
 			self->s.v.noise = "items/r_item2.wav";
 			self->healamount = 100;
 			self->healtype = 2;
@@ -246,14 +246,14 @@ void SP_item_health()
 		{
 			trap_precache_model( "maps/b_bh25.bsp" );
 			trap_precache_sound( "items/health1.wav" );
-			trap_setmodel( self, "maps/b_bh25.bsp" );
+			setmodel( self, "maps/b_bh25.bsp" );
 			self->s.v.noise = "items/health1.wav";
 			self->healamount = 25;
 			self->healtype = 1;
 		}
 	}
 
-	trap_setsize( self, 0, 0, 0, 32, 32, 56 );
+	setsize( self, 0, 0, 0, 32, 32, 56 );
 	StartItem( self );
 }
 
@@ -284,9 +284,9 @@ void health_touch()
 	G_sprint( other, PRINT_LOW, "You receive %.0f health\n", self->healamount );
 
 // health touch sound
-	trap_sound( other, CHAN_ITEM, self->s.v.noise, 1, ATTN_NORM );
+	sound( other, CHAN_ITEM, self->s.v.noise, 1, ATTN_NORM );
 
-	trap_stuffcmd( other, "bf\n" );
+	stuffcmd( other, "bf\n" );
 
 	self->s.v.model = "";
 	self->s.v.solid = SOLID_NOT;
@@ -386,8 +386,8 @@ void armor_touch()
 
 	G_sprint( other, PRINT_LOW, "You got armor\n" );
 // armor touch sound
-	trap_sound( other, CHAN_ITEM, "items/armor1.wav", 1, ATTN_NORM );
-	trap_stuffcmd( other, "bf\n" );
+	sound( other, CHAN_ITEM, "items/armor1.wav", 1, ATTN_NORM );
+	stuffcmd( other, "bf\n" );
 
 	activator = other;
 	SUB_UseTargets();	// fire all targets / killtargets
@@ -400,9 +400,9 @@ void SP_item_armor1()
 {
 	self->s.v.touch = ( func_t ) armor_touch;
 	trap_precache_model( "progs/armor.mdl" );
-	trap_setmodel( self, "progs/armor.mdl" );
+	setmodel( self, "progs/armor.mdl" );
 	self->s.v.skin = 0;
-	trap_setsize( self, -16, -16, 0, 16, 16, 56 );
+	setsize( self, -16, -16, 0, 16, 16, 56 );
 	StartItem( self );
 }
 
@@ -413,9 +413,9 @@ void SP_item_armor2()
 {
 	self->s.v.touch = ( func_t ) armor_touch;
 	trap_precache_model( "progs/armor.mdl" );
-	trap_setmodel( self, "progs/armor.mdl" );
+	setmodel( self, "progs/armor.mdl" );
 	self->s.v.skin = 1;
-	trap_setsize( self, -16, -16, 0, 16, 16, 56 );
+	setsize( self, -16, -16, 0, 16, 16, 56 );
 	StartItem( self );
 }
 
@@ -426,9 +426,9 @@ void SP_item_armorInv()
 {
 	self->s.v.touch = ( func_t ) armor_touch;
 	trap_precache_model( "progs/armor.mdl" );
-	trap_setmodel( self, "progs/armor.mdl" );
+	setmodel( self, "progs/armor.mdl" );
 	self->s.v.skin = 2;
-	trap_setsize( self, -16, -16, 0, 16, 16, 56 );
+	setsize( self, -16, -16, 0, 16, 16, 56 );
 	StartItem( self );
 }
 
@@ -524,7 +524,7 @@ void weapon_touch()
 	if ( !( ( int ) other->s.v.flags & FL_CLIENT ) )
 		return;
 
-	trap_infokey( other, "w_switch", s, sizeof( s ) );
+	infokey( other, "w_switch", s, sizeof( s ) );
 	w_switch = atoi( s );
 	if ( !w_switch )
 		w_switch = 8;
@@ -597,8 +597,8 @@ void weapon_touch()
 
 	G_sprint( other, PRINT_LOW, "You got the %s\n", self->s.v.netname );
 // weapon touch sound
-	trap_sound( other, CHAN_ITEM, "weapons/pkup.wav", 1, ATTN_NORM );
-	trap_stuffcmd( other, "bf\n" );
+	sound( other, CHAN_ITEM, "weapons/pkup.wav", 1, ATTN_NORM );
+	stuffcmd( other, "bf\n" );
 
 	bound_other_ammo();
 
@@ -651,13 +651,13 @@ void SP_weapon_supershotgun()
 	if ( deathmatch <= 3 )
 	{
 		trap_precache_model( "progs/g_shot.mdl" );
-		trap_setmodel( self, "progs/g_shot.mdl" );
+		setmodel( self, "progs/g_shot.mdl" );
 
 		self->s.v.weapon = IT_SUPER_SHOTGUN;
 		self->s.v.netname = "Double-barrelled Shotgun";
 		self->s.v.touch = ( func_t ) weapon_touch;
 
-		trap_setsize( self, -16, -16, 0, 16, 16, 56 );
+		setsize( self, -16, -16, 0, 16, 16, 56 );
 
 		StartItem();
 	}
@@ -671,13 +671,13 @@ void SP_weapon_nailgun()
 	if ( deathmatch <= 3 )
 	{
 		trap_precache_model( "progs/g_nail.mdl" );
-		trap_setmodel( self, "progs/g_nail.mdl" );
+		setmodel( self, "progs/g_nail.mdl" );
 
 		self->s.v.weapon = IT_NAILGUN;
 		self->s.v.netname = "nailgun";
 		self->s.v.touch = ( func_t ) weapon_touch;
 
-		trap_setsize( self, -16, -16, 0, 16, 16, 56 );
+		setsize( self, -16, -16, 0, 16, 16, 56 );
 		
 		StartItem();
 	}
@@ -691,13 +691,13 @@ void SP_weapon_supernailgun()
 	if ( deathmatch <= 3 )
 	{
 		trap_precache_model( "progs/g_nail2.mdl" );
-		trap_setmodel( self, "progs/g_nail2.mdl" );
+		setmodel( self, "progs/g_nail2.mdl" );
 
 		self->s.v.weapon = IT_SUPER_NAILGUN;
 		self->s.v.netname = "Super Nailgun";
 		self->s.v.touch = ( func_t ) weapon_touch;
 
-		trap_setsize( self, -16, -16, 0, 16, 16, 56 );
+		setsize( self, -16, -16, 0, 16, 16, 56 );
 
 		StartItem();
 	}
@@ -711,13 +711,13 @@ void SP_weapon_grenadelauncher()
 	if ( deathmatch <= 3 )
 	{
 		trap_precache_model( "progs/g_rock.mdl" );
-		trap_setmodel( self, "progs/g_rock.mdl" );
+		setmodel( self, "progs/g_rock.mdl" );
 
 		self->s.v.weapon = 3;
 		self->s.v.netname = "Grenade Launcher";
 		self->s.v.touch = ( func_t ) weapon_touch;
 
-		trap_setsize( self, -16, -16, 0, 16, 16, 56 );
+		setsize( self, -16, -16, 0, 16, 16, 56 );
 
 		StartItem();
 	}
@@ -731,13 +731,13 @@ void SP_weapon_rocketlauncher()
 	if ( deathmatch <= 3 )
 	{
 		trap_precache_model( "progs/g_rock2.mdl" );
-		trap_setmodel( self, "progs/g_rock2.mdl" );
+		setmodel( self, "progs/g_rock2.mdl" );
 
 		self->s.v.weapon = 3;
 		self->s.v.netname = "Rocket Launcher";
 		self->s.v.touch = ( func_t ) weapon_touch;
 
-		trap_setsize( self, -16, -16, 0, 16, 16, 56 );
+		setsize( self, -16, -16, 0, 16, 16, 56 );
 
 		StartItem();
 	}
@@ -752,13 +752,13 @@ void SP_weapon_lightning()
 	if ( deathmatch <= 3 )
 	{
 		trap_precache_model( "progs/g_light.mdl" );
-		trap_setmodel( self, "progs/g_light.mdl" );
+		setmodel( self, "progs/g_light.mdl" );
 
 		self->s.v.weapon = 3;
 		self->s.v.netname = "Thunderbolt";
 		self->s.v.touch = ( func_t ) weapon_touch;
 
-		trap_setsize( self, -16, -16, 0, 16, 16, 56 );
+		setsize( self, -16, -16, 0, 16, 16, 56 );
 
 		StartItem();
 	}
@@ -824,8 +824,8 @@ void ammo_touch()
 
 	G_sprint( other, PRINT_LOW, "You got the %s\n", self->s.v.netname );
 // ammo touch sound
-	trap_sound( other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM );
-	trap_stuffcmd( other, "bf\n" );
+	sound( other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM );
+	stuffcmd( other, "bf\n" );
 
 // change to a better weapon if appropriate
 
@@ -878,19 +878,19 @@ void SP_item_shells()
 	if ( ( int ) ( self->s.v.spawnflags ) & WEAPON_BIG2 )
 	{
 		trap_precache_model( "maps/b_shell1.bsp" );
-		trap_setmodel( self, "maps/b_shell1.bsp" );
+		setmodel( self, "maps/b_shell1.bsp" );
 		self->aflag = 40;
 	} else
 	{
 		trap_precache_model( "maps/b_shell0.bsp" );
-		trap_setmodel( self, "maps/b_shell0.bsp" );
+		setmodel( self, "maps/b_shell0.bsp" );
 		self->aflag = 20;
 	}
 
 	self->s.v.weapon = 1;
 	self->s.v.netname = "shells";
 
-	trap_setsize( self, 0, 0, 0, 32, 32, 56 );
+	setsize( self, 0, 0, 0, 32, 32, 56 );
 	StartItem();
 }
 
@@ -907,18 +907,18 @@ void SP_item_spikes()
 	if ( ( int ) ( self->s.v.spawnflags ) & WEAPON_BIG2 )
 	{
 		trap_precache_model( "maps/b_nail1.bsp" );
-		trap_setmodel( self, "maps/b_nail1.bsp" );
+		setmodel( self, "maps/b_nail1.bsp" );
 		self->aflag = 50;
 	} else
 	{
 		trap_precache_model( "maps/b_nail0.bsp" );
-		trap_setmodel( self, "maps/b_nail0.bsp" );
+		setmodel( self, "maps/b_nail0.bsp" );
 		self->aflag = 25;
 	}
 	self->s.v.weapon = 2;
 	self->s.v.netname = "nails";
 
-	trap_setsize( self, 0, 0, 0, 32, 32, 56 );
+	setsize( self, 0, 0, 0, 32, 32, 56 );
 
 	StartItem();
 
@@ -937,18 +937,18 @@ void SP_item_rockets()
 	if ( ( int ) ( self->s.v.spawnflags ) & WEAPON_BIG2 )
 	{
 		trap_precache_model( "maps/b_rock1.bsp" );
-		trap_setmodel( self, "maps/b_rock1.bsp" );
+		setmodel( self, "maps/b_rock1.bsp" );
 		self->aflag = 10;
 	} else
 	{
 		trap_precache_model( "maps/b_rock0.bsp" );
-		trap_setmodel( self, "maps/b_rock0.bsp" );
+		setmodel( self, "maps/b_rock0.bsp" );
 		self->aflag = 5;
 	}
 	self->s.v.weapon = 3;
 	self->s.v.netname = "rockets";
 
-	trap_setsize( self, 0, 0, 0, 32, 32, 56 );
+	setsize( self, 0, 0, 0, 32, 32, 56 );
 
 	StartItem();
 
@@ -968,19 +968,19 @@ void SP_item_cells()
 	if ( ( int ) ( self->s.v.spawnflags ) & WEAPON_BIG2 )
 	{
 		trap_precache_model( "maps/b_batt1.bsp" );
-		trap_setmodel( self, "maps/b_batt1.bsp" );
+		setmodel( self, "maps/b_batt1.bsp" );
 		self->aflag = 12;
 	} else
 	{
 		trap_precache_model( "maps/b_batt0.bsp" );
-		trap_setmodel( self, "maps/b_batt0.bsp" );
+		setmodel( self, "maps/b_batt0.bsp" );
 		self->aflag = 6;
 	}
 
 	self->s.v.weapon = 4;
 	self->s.v.netname = "cells";
 
-	trap_setsize( self, 0, 0, 0, 32, 32, 56 );
+	setsize( self, 0, 0, 0, 32, 32, 56 );
 
 	StartItem();
 
@@ -1004,12 +1004,12 @@ void SP_item_weapon()
 		if ( ( int ) ( self->s.v.spawnflags ) & WEAPON_BIG )
 		{
 			trap_precache_model( "maps/b_shell1.bsp" );
-			trap_setmodel( self, "maps/b_shell1.bsp" );
+			setmodel( self, "maps/b_shell1.bsp" );
 			self->aflag = 40;
 		} else
 		{
 			trap_precache_model( "maps/b_shell0.bsp" );
-			trap_setmodel( self, "maps/b_shell0.bsp" );
+			setmodel( self, "maps/b_shell0.bsp" );
 			self->aflag = 20;
 		}
 		self->s.v.weapon = 1;
@@ -1021,12 +1021,12 @@ void SP_item_weapon()
 		if ( ( int ) ( self->s.v.spawnflags ) & WEAPON_BIG )
 		{
 			trap_precache_model( "maps/b_nail1.bsp" );
-			trap_setmodel( self, "maps/b_nail1.bsp" );
+			setmodel( self, "maps/b_nail1.bsp" );
 			self->aflag = 40;
 		} else
 		{
 			trap_precache_model( "maps/b_nail0.bsp" );
-			trap_setmodel( self, "maps/b_nail0.bsp" );
+			setmodel( self, "maps/b_nail0.bsp" );
 			self->aflag = 20;
 		}
 		self->s.v.weapon = 2;
@@ -1038,19 +1038,19 @@ void SP_item_weapon()
 		if ( ( int ) ( self->s.v.spawnflags ) & WEAPON_BIG )
 		{
 			trap_precache_model( "maps/b_rock1.bsp" );
-			trap_setmodel( self, "maps/b_rock1.bsp" );
+			setmodel( self, "maps/b_rock1.bsp" );
 			self->aflag = 10;
 		} else
 		{
 			trap_precache_model( "maps/b_rock0.bsp" );
-			trap_setmodel( self, "maps/b_rock0.bsp" );
+			setmodel( self, "maps/b_rock0.bsp" );
 			self->aflag = 5;
 		}
 		self->s.v.weapon = 3;
 		self->s.v.netname = "rockets";
 	}
 
-	trap_setsize( self, 0, 0, 0, 32, 32, 56 );
+	setsize( self, 0, 0, 0, 32, 32, 56 );
 
 	StartItem();
 }
@@ -1078,8 +1078,8 @@ void key_touch()
 
 	G_sprint( other, PRINT_LOW, "You got the %s\n", self->s.v.netname );
 
-	trap_sound( other, CHAN_ITEM, self->s.v.noise, 1, ATTN_NORM );
-	trap_stuffcmd( other, "bf\n" );
+	sound( other, CHAN_ITEM, self->s.v.noise, 1, ATTN_NORM );
+	stuffcmd( other, "bf\n" );
 	other->s.v.items = ( int ) other->s.v.items | ( int ) self->s.v.items;
 
 	self->s.v.solid = SOLID_NOT;
@@ -1125,23 +1125,23 @@ void SP_item_key1()
 	if ( world->worldtype == 0 )
 	{
 		trap_precache_model( "progs/w_s_key.mdl" );
-		trap_setmodel( self, "progs/w_s_key.mdl" );
+		setmodel( self, "progs/w_s_key.mdl" );
 		self->s.v.netname = "silver key";
 	} else if ( world->worldtype == 1 )
 	{
 		trap_precache_model( "progs/m_s_key.mdl" );
-		trap_setmodel( self, "progs/m_s_key.mdl" );
+		setmodel( self, "progs/m_s_key.mdl" );
 		self->s.v.netname = "silver runekey";
 	} else if ( world->worldtype == 2 )
 	{
 		trap_precache_model( "progs/b_s_key.mdl" );
-		trap_setmodel( self, "progs/b_s_key.mdl" );
+		setmodel( self, "progs/b_s_key.mdl" );
 		self->s.v.netname = "silver keycard";
 	}
 	key_setsounds();
 	self->s.v.touch = ( func_t ) key_touch;
 	self->s.v.items = IT_KEY1;
-	trap_setsize( self, -16, -16, -24, 16, 16, 32 );
+	setsize( self, -16, -16, -24, 16, 16, 32 );
 	StartItem();
 }
 
@@ -1161,25 +1161,25 @@ void SP_item_key2()
 	if ( world->worldtype == 0 )
 	{
 		trap_precache_model( "progs/w_g_key.mdl" );
-		trap_setmodel( self, "progs/w_g_key.mdl" );
+		setmodel( self, "progs/w_g_key.mdl" );
 		self->s.v.netname = "gold key";
 	}
 	if ( world->worldtype == 1 )
 	{
 		trap_precache_model( "progs/m_g_key.mdl" );
-		trap_setmodel( self, "progs/m_g_key.mdl" );
+		setmodel( self, "progs/m_g_key.mdl" );
 		self->s.v.netname = "gold runekey";
 	}
 	if ( world->worldtype == 2 )
 	{
 		trap_precache_model( "progs/b_g_key.mdl" );
-		trap_setmodel( self, "progs/b_g_key.mdl" );
+		setmodel( self, "progs/b_g_key.mdl" );
 		self->s.v.netname = "gold keycard";
 	}
 	key_setsounds();
 	self->s.v.touch = ( func_t ) key_touch;
 	self->s.v.items = IT_KEY2;
-	trap_setsize( self, -16, -16, -24, 16, 16, 32 );
+	setsize( self, -16, -16, -24, 16, 16, 32 );
 	StartItem();
 }
 
@@ -1204,8 +1204,8 @@ void sigil_touch()
 
 	G_centerprint( other, "You got the rune!" );
 
-	trap_sound( other, CHAN_ITEM, self->s.v.noise, 1, ATTN_NORM );
-	trap_stuffcmd( other, "bf\n" );
+	sound( other, CHAN_ITEM, self->s.v.noise, 1, ATTN_NORM );
+	stuffcmd( other, "bf\n" );
 	self->s.v.solid = SOLID_NOT;
 	self->s.v.model = "";
 	g_globalvars.serverflags =
@@ -1233,26 +1233,26 @@ void SP_item_sigil()
 	if ( ( int ) ( self->s.v.spawnflags ) & 1 )
 	{
 		trap_precache_model( "progs/end1.mdl" );
-		trap_setmodel( self, "progs/end1.mdl" );
+		setmodel( self, "progs/end1.mdl" );
 	}
 	if ( ( int ) ( self->s.v.spawnflags ) & 2 )
 	{
 		trap_precache_model( "progs/end2.mdl" );
-		trap_setmodel( self, "progs/end2.mdl" );
+		setmodel( self, "progs/end2.mdl" );
 	}
 	if ( ( int ) ( self->s.v.spawnflags ) & 4 )
 	{
 		trap_precache_model( "progs/end3.mdl" );
-		trap_setmodel( self, "progs/end3.mdl" );
+		setmodel( self, "progs/end3.mdl" );
 	}
 	if ( ( int ) ( self->s.v.spawnflags ) & 8 )
 	{
 		trap_precache_model( "progs/end4.mdl" );
-		trap_setmodel( self, "progs/end4.mdl" );
+		setmodel( self, "progs/end4.mdl" );
 	}
 
 	self->s.v.touch = ( func_t ) sigil_touch;
-	trap_setsize( self, -16, -16, -24, 16, 16, 32 );
+	setsize( self, -16, -16, -24, 16, 16, 32 );
 	StartItem();
 }
 
@@ -1289,8 +1289,8 @@ void powerup_touch()
 
 	self->s.v.think = ( func_t ) SUB_regen;
 
-	trap_sound( other, CHAN_VOICE, self->s.v.noise, 1, ATTN_NORM );
-	trap_stuffcmd( other, "bf\n" );
+	sound( other, CHAN_VOICE, self->s.v.noise, 1, ATTN_NORM );
+	stuffcmd( other, "bf\n" );
 	self->s.v.solid = SOLID_NOT;
 	other->s.v.items = ( ( int ) other->s.v.items ) | ( ( int ) self->s.v.items );
 	self->s.v.model = "";
@@ -1344,11 +1344,11 @@ void SP_item_artifact_invulnerability()
 	trap_precache_sound( "items/protect2.wav" );
 	trap_precache_sound( "items/protect3.wav" );
 	self->s.v.noise = "items/protect.wav";
-	trap_setmodel( self, "progs/invulner.mdl" );
+	setmodel( self, "progs/invulner.mdl" );
 	self->s.v.netname = "Pentagram of Protection";
 	self->s.v.effects = ( int ) self->s.v.effects | EF_RED;
 	self->s.v.items = IT_INVULNERABILITY;
-	trap_setsize( self, -16, -16, -24, 16, 16, 32 );
+	setsize( self, -16, -16, -24, 16, 16, 32 );
 	StartItem();
 }
 
@@ -1363,10 +1363,10 @@ void SP_item_artifact_envirosuit()
 	trap_precache_sound( "items/suit.wav" );
 	trap_precache_sound( "items/suit2.wav" );
 	self->s.v.noise = "items/suit.wav";
-	trap_setmodel( self, "progs/suit.mdl" );
+	setmodel( self, "progs/suit.mdl" );
 	self->s.v.netname = "Biosuit";
 	self->s.v.items = IT_SUIT;
-	trap_setsize( self, -16, -16, -24, 16, 16, 32 );
+	setsize( self, -16, -16, -24, 16, 16, 32 );
 	StartItem();
 }
 
@@ -1383,10 +1383,10 @@ void SP_item_artifact_invisibility()
 	trap_precache_sound( "items/inv2.wav" );
 	trap_precache_sound( "items/inv3.wav" );
 	self->s.v.noise = "items/inv1.wav";
-	trap_setmodel( self, "progs/invisibl.mdl" );
+	setmodel( self, "progs/invisibl.mdl" );
 	self->s.v.netname = "Ring of Shadows";
 	self->s.v.items = IT_INVISIBILITY;
-	trap_setsize( self, -16, -16, -24, 16, 16, 32 );
+	setsize( self, -16, -16, -24, 16, 16, 32 );
 	StartItem();
 }
 
@@ -1403,14 +1403,14 @@ void SP_item_artifact_super_damage()
 	trap_precache_sound( "items/damage2.wav" );
 	trap_precache_sound( "items/damage3.wav" );
 	self->s.v.noise = "items/damage.wav";
-	trap_setmodel( self, "progs/quaddama.mdl" );
+	setmodel( self, "progs/quaddama.mdl" );
 	if ( deathmatch == 4 )
 		self->s.v.netname = "OctaPower";
 	else
 		self->s.v.netname = "Quad Damage";
 	self->s.v.items = IT_QUAD;
 	self->s.v.effects = ( int ) self->s.v.effects | EF_BLUE;
-	trap_setsize( self, -16, -16, -24, 16, 16, 32 );
+	setsize( self, -16, -16, -24, 16, 16, 32 );
 	StartItem();
 }
 
@@ -1435,7 +1435,7 @@ void BackpackTouch()
 		if ( other->invincible_time > 0 )
 			return;
 
-	trap_infokey( other, "b_switch", s, sizeof( s ) );
+	infokey( other, "b_switch", s, sizeof( s ) );
 	b_switch = atoi( s );
 	if ( !b_switch )
 		b_switch = 8;
@@ -1455,11 +1455,11 @@ void BackpackTouch()
 		other->s.v.health = other->s.v.health + 10;
 		G_sprint( other, PRINT_LOW, "10 additional health\n" );
 		if ( ( other->s.v.health > 250 ) && ( other->s.v.health < 300 ) )
-			trap_sound( other, CHAN_ITEM, "items/protect3.wav", 1, ATTN_NORM );
+			sound( other, CHAN_ITEM, "items/protect3.wav", 1, ATTN_NORM );
 		else
-			trap_sound( other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM );
+			sound( other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM );
 
-		trap_stuffcmd( other, "bf\n" );
+		stuffcmd( other, "bf\n" );
 		ent_remove( self );
 
 		if ( other->s.v.health > 299 )
@@ -1478,8 +1478,8 @@ void BackpackTouch()
 				other->s.v.ammo_cells = 0;
 
 
-				trap_sound( other, CHAN_VOICE, "boss1/sight1.wav", 1, ATTN_NORM );
-				trap_stuffcmd( other, "bf\n" );
+				sound( other, CHAN_VOICE, "boss1/sight1.wav", 1, ATTN_NORM );
+				stuffcmd( other, "bf\n" );
 
 				G_bprint( PRINT_HIGH, "%s attains bonus powers!!!\n",
 					  other->s.v.netname );
@@ -1550,8 +1550,8 @@ void BackpackTouch()
 
 	G_sprint( other, PRINT_LOW, "\n" );
 // backpack touch sound
-	trap_sound( other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM );
-	trap_stuffcmd( other, "bf\n" );
+	sound( other, CHAN_ITEM, "weapons/lock4.wav", 1, ATTN_NORM );
+	stuffcmd( other, "bf\n" );
 
 	ent_remove( self );
 	self = other;
@@ -1627,8 +1627,8 @@ void DropBackpack()
 	item->s.v.flags = FL_ITEM;
 	item->s.v.solid = SOLID_TRIGGER;
 	item->s.v.movetype = MOVETYPE_TOSS;
-	trap_setmodel( item, "progs/backpack.mdl" );
-	trap_setsize( item, -16, -16, 0, 16, 16, 56 );
+	setmodel( item, "progs/backpack.mdl" );
+	setsize( item, -16, -16, 0, 16, 16, 56 );
 	item->s.v.touch = ( func_t ) BackpackTouch;
 
 	item->s.v.nextthink = g_globalvars.time + 120;	// remove after 2 minutes

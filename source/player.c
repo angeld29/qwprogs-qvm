@@ -103,7 +103,7 @@ void player_run()
 void muzzleflash()
 {
 	trap_WriteByte( MSG_MULTICAST, SVC_MUZZLEFLASH );
-	trap_WriteEntity( MSG_MULTICAST, self );
+	WriteEntity( MSG_MULTICAST, self );
 	trap_multicast( PASSVEC3( self->s.v.origin ), MULTICAST_PVS );
 }
 
@@ -469,7 +469,7 @@ void PainSound()
 
 	if ( streq( self->s.v.classname, "teledeath" ) )
 	{
-		trap_sound( self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE );
+		sound( self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE );
 		return;
 	}
 // water pain sounds
@@ -477,9 +477,9 @@ void PainSound()
 	{
 		DeathBubbles( 1 );
 		if ( g_random() > 0.5 )
-			trap_sound( self, CHAN_VOICE, "player/drown1.wav", 1, ATTN_NORM );
+			sound( self, CHAN_VOICE, "player/drown1.wav", 1, ATTN_NORM );
 		else
-			trap_sound( self, CHAN_VOICE, "player/drown2.wav", 1, ATTN_NORM );
+			sound( self, CHAN_VOICE, "player/drown2.wav", 1, ATTN_NORM );
 		return;
 	}
 // slime pain sounds
@@ -487,18 +487,18 @@ void PainSound()
 	{
 // FIX ME       put in some steam here
 		if ( g_random() > 0.5 )
-			trap_sound( self, CHAN_VOICE, "player/lburn1.wav", 1, ATTN_NORM );
+			sound( self, CHAN_VOICE, "player/lburn1.wav", 1, ATTN_NORM );
 		else
-			trap_sound( self, CHAN_VOICE, "player/lburn2.wav", 1, ATTN_NORM );
+			sound( self, CHAN_VOICE, "player/lburn2.wav", 1, ATTN_NORM );
 		return;
 	}
 
 	if ( self->s.v.watertype == CONTENT_LAVA )
 	{
 		if ( g_random() > 0.5 )
-			trap_sound( self, CHAN_VOICE, "player/lburn1.wav", 1, ATTN_NORM );
+			sound( self, CHAN_VOICE, "player/lburn1.wav", 1, ATTN_NORM );
 		else
-			trap_sound( self, CHAN_VOICE, "player/lburn2.wav", 1, ATTN_NORM );
+			sound( self, CHAN_VOICE, "player/lburn2.wav", 1, ATTN_NORM );
 		return;
 	}
 
@@ -515,7 +515,7 @@ void PainSound()
 	if ( self->axhitme == 1 )
 	{
 		self->axhitme = 0;
-		trap_sound( self, CHAN_VOICE, "player/axhit1.wav", 1, ATTN_NORM );
+		sound( self, CHAN_VOICE, "player/axhit1.wav", 1, ATTN_NORM );
 		return;
 	}
 
@@ -536,7 +536,7 @@ void PainSound()
 	else
 		self->s.v.noise = "player/pain6.wav";
 
-	trap_sound( self, CHAN_VOICE, self->s.v.noise, 1, ATTN_NORM );
+	sound( self, CHAN_VOICE, self->s.v.noise, 1, ATTN_NORM );
 	return;
 }
 
@@ -668,8 +668,8 @@ void DeathBubblesSpawn()
 	if ( PROG_TO_EDICT( self->s.v.owner )->s.v.waterlevel != 3 )
 		return;
 	bubble = spawn();
-	trap_setmodel( bubble, "progs/s_bubble.spr" );
-	trap_setorigin( bubble, PROG_TO_EDICT( self->s.v.owner )->s.v.origin[0],
+	setmodel( bubble, "progs/s_bubble.spr" );
+	setorigin( bubble, PROG_TO_EDICT( self->s.v.owner )->s.v.origin[0],
 			PROG_TO_EDICT( self->s.v.owner )->s.v.origin[1],
 			PROG_TO_EDICT( self->s.v.owner )->s.v.origin[2] + 24 );
 
@@ -684,7 +684,7 @@ void DeathBubblesSpawn()
 	bubble->s.v.frame = 0;
 	bubble->cnt = 0;
 	
-	trap_setsize( bubble, -8, -8, -8, 8, 8, 8 );
+	setsize( bubble, -8, -8, -8, 8, 8, 8 );
 
 	self->s.v.nextthink = g_globalvars.time + 0.1;
 	self->s.v.think = ( func_t ) DeathBubblesSpawn;
@@ -699,7 +699,7 @@ void DeathBubbles( float num_bubbles )
 	gedict_t       *bubble_spawner;
 
 	bubble_spawner = spawn();
-	trap_setorigin( bubble_spawner, PASSVEC3( self->s.v.origin ) );
+	setorigin( bubble_spawner, PASSVEC3( self->s.v.origin ) );
 
 	bubble_spawner->s.v.movetype = MOVETYPE_NONE;
 	bubble_spawner->s.v.solid = SOLID_NOT;
@@ -720,7 +720,7 @@ void DeathSound()
 	if ( self->s.v.waterlevel == 3 )
 	{
 		DeathBubbles( 5 );
-		trap_sound( self, CHAN_VOICE, "player/h2odeath.wav", 1, ATTN_NONE );
+		sound( self, CHAN_VOICE, "player/h2odeath.wav", 1, ATTN_NONE );
 		return;
 	}
 
@@ -736,7 +736,7 @@ void DeathSound()
 	if ( rs == 5 )
 		self->s.v.noise = "player/death5.wav";
 
-	trap_sound( self, CHAN_VOICE, self->s.v.noise, 1, ATTN_NONE );
+	sound( self, CHAN_VOICE, self->s.v.noise, 1, ATTN_NONE );
 	return;
 }
 
@@ -798,8 +798,8 @@ void ThrowGib( char *gibname, float dm )
 
 	newent = spawn();
 	VectorCopy( self->s.v.origin, newent->s.v.origin );
-	trap_setmodel( newent, gibname );
-	trap_setsize( newent, 0, 0, 0, 0, 0, 0 );
+	setmodel( newent, gibname );
+	setsize( newent, 0, 0, 0, 0, 0, 0 );
 	VelocityForDamage( dm, newent->s.v.velocity );
 	newent->s.v.movetype = MOVETYPE_BOUNCE;
 	newent->s.v.solid = SOLID_NOT;
@@ -815,14 +815,14 @@ void ThrowGib( char *gibname, float dm )
 
 void ThrowHead( char *gibname, float dm )
 {
-	trap_setmodel( self, gibname );
+	setmodel( self, gibname );
 	self->s.v.frame = 0;
 	self->s.v.nextthink = -1;
 	self->s.v.movetype = MOVETYPE_BOUNCE;
 	self->s.v.takedamage = DAMAGE_NO;
 	self->s.v.solid = SOLID_NOT;
 	SetVector( self->s.v.view_ofs, 0, 0, 8 );
-	trap_setsize( self, -16, -16, 0, 16, 16, 56 );
+	setsize( self, -16, -16, 0, 16, 16, 56 );
 	VelocityForDamage( dm, self->s.v.velocity );
 	self->s.v.origin[2] = self->s.v.origin[2] - 24;
 	self->s.v.flags -= ( ( int ) ( self->s.v.flags ) ) & FL_ONGROUND;
@@ -842,20 +842,20 @@ void GibPlayer()
 
 	if ( streq( damage_attacker->s.v.classname, "teledeath" ) )
 	{
-		trap_sound( self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE );
+		sound( self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE );
 		return;
 	}
 
 	if ( streq( damage_attacker->s.v.classname, "teledeath2" ) )
 	{
-		trap_sound( self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE );
+		sound( self, CHAN_VOICE, "player/teledth1.wav", 1, ATTN_NONE );
 		return;
 	}
 
 	if ( g_random() < 0.5 )
-		trap_sound( self, CHAN_VOICE, "player/gib.wav", 1, ATTN_NONE );
+		sound( self, CHAN_VOICE, "player/gib.wav", 1, ATTN_NONE );
 	else
-		trap_sound( self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NONE );
+		sound( self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NONE );
 }
 
 void PlayerDie()
@@ -864,7 +864,7 @@ void PlayerDie()
 	char            s[10];
 
 	self->s.v.items -= ( int ) self->s.v.items & IT_INVISIBILITY;
-	trap_infokey( world, "dq", s, sizeof( s ) );
+	infokey( world, "dq", s, sizeof( s ) );
 
 	if ( atoi( s ) != 0 )
 	{
@@ -885,7 +885,7 @@ void PlayerDie()
 					  g_globalvars.time );
 		}
 	}
-	trap_infokey( world, "dr", s, sizeof( s ) );
+	infokey( world, "dr", s, sizeof( s ) );
 	if ( atoi( s ) != 0 )
 	{
 		if ( self->invisible_finished > 0 )

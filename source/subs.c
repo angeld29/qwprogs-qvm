@@ -56,7 +56,7 @@ void InitTrigger()
 	if ( !VectorCompareF( self->s.v.angles, 0, 0, 0 ) )
 		SetMovedir( self );
 	self->s.v.solid = SOLID_TRIGGER;
-	trap_setmodel( self, self->s.v.model );	// set size and link into world
+	setmodel( self, self->s.v.model );	// set size and link into world
 	self->s.v.movetype = MOVETYPE_NONE;
 	self->s.v.modelindex = 0;
 	self->s.v.model = "";
@@ -127,7 +127,7 @@ After moving, set origin to exact final destination
 */
 void SUB_CalcMoveDone()
 {
-	trap_setorigin( self, PASSVEC3( self->finaldest ) );
+	setorigin( self, PASSVEC3( self->finaldest ) );
 
 	SetVector( self->s.v.velocity, 0, 0, 0 );
 	//self->s.v.nextthink = -1;
@@ -257,9 +257,9 @@ void SUB_UseTargets()
 	if ( streq( activator->s.v.classname, "player" ) && self->s.v.message )
 		if ( strneq( self->s.v.message, "" ) )
 		{
-			trap_CenterPrint( activator, self->s.v.message );
+			G_centerprint( activator, self->s.v.message );
 			if ( !self->s.v.noise )
-				trap_sound( activator, CHAN_VOICE, "misc/talk.wav", 1,
+				sound( activator, CHAN_VOICE, "misc/talk.wav", 1,
 					    ATTN_NORM );
 		}
 //

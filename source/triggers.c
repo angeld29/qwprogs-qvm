@@ -69,7 +69,7 @@ void multi_trigger()
 	}
 
 	if ( self->s.v.noise )
-		trap_sound( self, CHAN_VOICE, self->s.v.noise, 1, ATTN_NORM );
+		sound( self, CHAN_VOICE, self->s.v.noise, 1, ATTN_NORM );
 
 // don't trigger again until reset
 	self->s.v.takedamage = DAMAGE_NO;
@@ -166,7 +166,7 @@ void SP_trigger_multiple()
 		self->th_die = multi_killed;
 		self->s.v.takedamage = DAMAGE_YES;
 		self->s.v.solid = SOLID_BBOX;
-		trap_setorigin( self, PASSVEC3( self->s.v.origin ) );	// make sure it links into the world
+		setorigin( self, PASSVEC3( self->s.v.origin ) );	// make sure it links into the world
 	} else
 	{
 		if ( !( ( int ) ( self->s.v.spawnflags ) & SPAWNFLAG_NOTOUCH ) )
@@ -320,7 +320,7 @@ void play_teleport()
 	else
 		tmpstr = "misc/r_tele5.wav";
 
-	trap_sound( self, CHAN_VOICE, tmpstr, 1, ATTN_NORM );
+	sound( self, CHAN_VOICE, tmpstr, 1, ATTN_NORM );
 	ent_remove( self );
 }
 
@@ -391,10 +391,10 @@ void spawn_tdeath( vec3_t org, gedict_t * death_owner )
 	death->s.v.solid = SOLID_TRIGGER;
 	SetVector( death->s.v.angles, 0, 0, 0 );
 
-	trap_setsize( death, death_owner->s.v.mins[0] - 1, death_owner->s.v.mins[1] - 1,
+	setsize( death, death_owner->s.v.mins[0] - 1, death_owner->s.v.mins[1] - 1,
 		      death_owner->s.v.mins[2] - 1, death_owner->s.v.maxs[0] + 1,
 		      death_owner->s.v.maxs[1] + 1, death_owner->s.v.maxs[2] + 1 );
-	trap_setorigin( death, PASSVEC3( org ) );
+	setorigin( death, PASSVEC3( org ) );
 
 	death->s.v.touch = ( func_t ) tdeath_touch;
 	death->s.v.nextthink = g_globalvars.time + 0.2;
@@ -463,7 +463,7 @@ void teleport_touch()
 		return;
 	}
 
-	trap_setorigin( other, PASSVEC3( t->s.v.origin ) );
+	setorigin( other, PASSVEC3( t->s.v.origin ) );
 	VectorCopy( t->mangle, other->s.v.angles );
 // other.angles = t.mangle;
 	if ( streq( other->s.v.classname, "player" ) )
@@ -571,7 +571,7 @@ void trigger_onlyregistered_touch()
 		if ( self->s.v.message && strneq( self->s.v.message, "" ) )
 		{
 			G_centerprint( other, self->s.v.message );
-			trap_sound( other, CHAN_BODY, "misc/talk.wav", 1, ATTN_NORM );
+			sound( other, CHAN_BODY, "misc/talk.wav", 1, ATTN_NORM );
 		}
 	}
 }
@@ -643,7 +643,7 @@ void trigger_push_touch()
 			if ( other->fly_sound < g_globalvars.time )
 			{
 				other->fly_sound = g_globalvars.time + 1.5;
-				trap_sound( other, CHAN_AUTO, "ambience/windfly.wav", 1,
+				sound( other, CHAN_AUTO, "ambience/windfly.wav", 1,
 					    ATTN_NORM );
 			}
 		}

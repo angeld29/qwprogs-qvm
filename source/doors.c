@@ -83,7 +83,7 @@ void door_blocked()
 
 void door_hit_top()
 {
-	trap_sound( self, CHAN_NO_PHS_ADD + CHAN_VOICE, self->s.v.noise1, 1, ATTN_NORM );
+	sound( self, CHAN_NO_PHS_ADD + CHAN_VOICE, self->s.v.noise1, 1, ATTN_NORM );
 	self->state = STATE_TOP;
 
 	if ( ( int ) ( self->s.v.spawnflags ) & DOOR_TOGGLE )
@@ -95,13 +95,13 @@ void door_hit_top()
 
 void door_hit_bottom()
 {
-	trap_sound( self, CHAN_NO_PHS_ADD + CHAN_VOICE, self->s.v.noise1, 1, ATTN_NORM );
+	sound( self, CHAN_NO_PHS_ADD + CHAN_VOICE, self->s.v.noise1, 1, ATTN_NORM );
 	self->state = STATE_BOTTOM;
 }
 
 void door_go_down()
 {
-	trap_sound( self, CHAN_VOICE, self->s.v.noise2, 1, ATTN_NORM );
+	sound( self, CHAN_VOICE, self->s.v.noise2, 1, ATTN_NORM );
 	if ( self->s.v.max_health )
 	{
 		self->s.v.takedamage = DAMAGE_YES;
@@ -125,7 +125,7 @@ void door_go_up()
 		return;
 	}
 
-	trap_sound( self, CHAN_VOICE, self->s.v.noise2, 1, ATTN_NORM );
+	sound( self, CHAN_VOICE, self->s.v.noise2, 1, ATTN_NORM );
 	self->state = STATE_UP;
 
 	SUB_CalcMove( self->pos2, self->speed, door_hit_top );
@@ -151,7 +151,7 @@ void door_fire()
 // play use key sound
 
 	if ( self->s.v.items )
-		trap_sound( self, CHAN_VOICE, self->noise4, 1, ATTN_NORM );
+		sound( self, CHAN_VOICE, self->noise4, 1, ATTN_NORM );
 
 	self->s.v.message = 0;	// no more message
 	oself = self;
@@ -253,8 +253,8 @@ void door_touch()
 
 	if ( msg && msg[0] )
 	{
-		trap_CenterPrint( other, PROG_TO_EDICT( self->s.v.owner )->s.v.message );
-		trap_sound( other, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM );
+		G_centerprint( other, PROG_TO_EDICT( self->s.v.owner )->s.v.message );
+		sound( other, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM );
 	}
 // key door stuff
 	if ( self->s.v.items == 0 )
@@ -267,36 +267,36 @@ void door_touch()
 		{
 			if ( world->worldtype == 2 )
 			{
-				trap_CenterPrint( other, "You need the silver keycard" );
-				trap_sound( self, CHAN_VOICE, self->s.v.noise3, 1,
+				G_centerprint( other, "You need the silver keycard" );
+				sound( self, CHAN_VOICE, self->s.v.noise3, 1,
 					    ATTN_NORM );
 			} else if ( world->worldtype == 1 )
 			{
-				trap_CenterPrint( other, "You need the silver runekey" );
-				trap_sound( self, CHAN_VOICE, self->s.v.noise3, 1,
+				G_centerprint( other, "You need the silver runekey" );
+				sound( self, CHAN_VOICE, self->s.v.noise3, 1,
 					    ATTN_NORM );
 			} else if ( world->worldtype == 0 )
 			{
-				trap_CenterPrint( other, "You need the silver key" );
-				trap_sound( self, CHAN_VOICE, self->s.v.noise3, 1,
+				G_centerprint( other, "You need the silver key" );
+				sound( self, CHAN_VOICE, self->s.v.noise3, 1,
 					    ATTN_NORM );
 			}
 		} else
 		{
 			if ( world->worldtype == 2 )
 			{
-				trap_CenterPrint( other, "You need the gold keycard" );
-				trap_sound( self, CHAN_VOICE, self->s.v.noise3, 1,
+				G_centerprint( other, "You need the gold keycard" );
+				sound( self, CHAN_VOICE, self->s.v.noise3, 1,
 					    ATTN_NORM );
 			} else if ( world->worldtype == 1 )
 			{
-				trap_CenterPrint( other, "You need the gold runekey" );
-				trap_sound( self, CHAN_VOICE, self->s.v.noise3, 1,
+				G_centerprint( other, "You need the gold runekey" );
+				sound( self, CHAN_VOICE, self->s.v.noise3, 1,
 					    ATTN_NORM );
 			} else if ( world->worldtype == 0 )
 			{
-				trap_CenterPrint( other, "You need the gold key" );
-				trap_sound( self, CHAN_VOICE, self->s.v.noise3, 1,
+				G_centerprint( other, "You need the gold key" );
+				sound( self, CHAN_VOICE, self->s.v.noise3, 1,
 					    ATTN_NORM );
 			}
 		}
@@ -331,7 +331,7 @@ gedict_t       *spawn_field( vec3_t fmins, vec3_t fmaxs )
 	trigger->s.v.owner = EDICT_TO_PROG( self );
 	trigger->s.v.touch = ( func_t ) door_trigger_touch;
 
-	trap_setsize( trigger, fmins[0] - 60, fmins[1] - 60, fmins[2] - 8, fmaxs[0] + 60,
+	setsize( trigger, fmins[0] - 60, fmins[1] - 60, fmins[2] - 8, fmaxs[0] + 60,
 		      fmaxs[1] + 60, fmaxs[2] + 8 );
 	return ( trigger );
 }
@@ -552,8 +552,8 @@ void SP_func_door()
 	self->s.v.solid = SOLID_BSP;
 	self->s.v.movetype = MOVETYPE_PUSH;
 
-	trap_setorigin( self, PASSVEC3( self->s.v.origin ) );
-	trap_setmodel( self, self->s.v.model );
+	setorigin( self, PASSVEC3( self->s.v.origin ) );
+	setmodel( self, self->s.v.model );
 
 	self->s.v.classname = "door";
 
@@ -591,7 +591,7 @@ void SP_func_door()
 // but spawn in the open position
 	if ( ( int ) ( self->s.v.spawnflags ) & DOOR_START_OPEN )
 	{
-		trap_setorigin( self, PASSVEC3( self->pos2 ) );
+		setorigin( self, PASSVEC3( self->pos2 ) );
 		VectorCopy( self->pos1, self->pos2 );
 		VectorCopy( self->s.v.origin, self->pos1 );
 	}
@@ -662,7 +662,7 @@ void fd_secret_use( gedict_t * attacker, float take )
 
 	// Make a sound, wait a little...
 
-	trap_sound( self, CHAN_VOICE, self->s.v.noise1, 1, ATTN_NORM );
+	sound( self, CHAN_VOICE, self->s.v.noise1, 1, ATTN_NORM );
 	self->s.v.nextthink = self->s.v.ltime + 0.1;
 
 	temp = 1 - ( ( int ) ( self->s.v.spawnflags ) & SECRET_1ST_LEFT );	// 1 or -1
@@ -706,7 +706,7 @@ void fd_secret_use( gedict_t * attacker, float take )
 	self->dest2[2] = self->dest1[2] + g_globalvars.v_forward[2] * self->t_length;
 
 	SUB_CalcMove( self->dest1, self->speed, fd_secret_move1 );
-	trap_sound( self, CHAN_VOICE, self->s.v.noise2, 1, ATTN_NORM );
+	sound( self, CHAN_VOICE, self->s.v.noise2, 1, ATTN_NORM );
 }
 
 // Wait after first movement...
@@ -714,20 +714,20 @@ void fd_secret_move1()
 {
 	self->s.v.nextthink = self->s.v.ltime + 1.0;
 	self->s.v.think = ( func_t ) fd_secret_move2;
-	trap_sound( self, CHAN_VOICE, self->s.v.noise3, 1, ATTN_NORM );
+	sound( self, CHAN_VOICE, self->s.v.noise3, 1, ATTN_NORM );
 }
 
 // Start moving sideways w/sound...
 void fd_secret_move2()
 {
-	trap_sound( self, CHAN_VOICE, self->s.v.noise2, 1, ATTN_NORM );
+	sound( self, CHAN_VOICE, self->s.v.noise2, 1, ATTN_NORM );
 	SUB_CalcMove( self->dest2, self->speed, fd_secret_move3 );
 }
 
 // Wait here until time to go back...
 void fd_secret_move3()
 {
-	trap_sound( self, CHAN_VOICE, self->s.v.noise3, 1, ATTN_NORM );
+	sound( self, CHAN_VOICE, self->s.v.noise3, 1, ATTN_NORM );
 	if ( !( ( int ) ( self->s.v.spawnflags ) & SECRET_OPEN_ONCE ) )
 	{
 		self->s.v.nextthink = self->s.v.ltime + self->wait;
@@ -738,7 +738,7 @@ void fd_secret_move3()
 // Move backward...
 void fd_secret_move4()
 {
-	trap_sound( self, CHAN_VOICE, self->s.v.noise2, 1, ATTN_NORM );
+	sound( self, CHAN_VOICE, self->s.v.noise2, 1, ATTN_NORM );
 	SUB_CalcMove( self->dest1, self->speed, fd_secret_move5 );
 }
 
@@ -747,12 +747,12 @@ void fd_secret_move5()
 {
 	self->s.v.nextthink = self->s.v.ltime + 1.0;
 	self->s.v.think = ( func_t ) fd_secret_move6;
-	trap_sound( self, CHAN_VOICE, self->s.v.noise3, 1, ATTN_NORM );
+	sound( self, CHAN_VOICE, self->s.v.noise3, 1, ATTN_NORM );
 }
 
 void fd_secret_move6()
 {
-	trap_sound( self, CHAN_VOICE, self->s.v.noise2, 1, ATTN_NORM );
+	sound( self, CHAN_VOICE, self->s.v.noise2, 1, ATTN_NORM );
 	SUB_CalcMove( self->s.v.oldorigin, self->speed, fd_secret_done );
 }
 
@@ -766,7 +766,7 @@ void fd_secret_done()
 		self->th_pain = fd_secret_use;
 		self->th_die = ( void ( * )() ) fd_secret_use;
 	}
-	trap_sound( self, CHAN_NO_PHS_ADD + CHAN_VOICE, self->s.v.noise3, 1, ATTN_NORM );
+	sound( self, CHAN_NO_PHS_ADD + CHAN_VOICE, self->s.v.noise3, 1, ATTN_NORM );
 }
 
 void secret_blocked()
@@ -797,8 +797,8 @@ void secret_touch()
 
 	if ( self->s.v.message )
 	{
-		trap_CenterPrint( other, self->s.v.message );
-		trap_sound( other, CHAN_BODY, "misc/talk.wav", 1, ATTN_NORM );
+		G_centerprint( other, self->s.v.message );
+		sound( other, CHAN_BODY, "misc/talk.wav", 1, ATTN_NORM );
 	}
 }
 
@@ -859,8 +859,8 @@ void SP_func_door_secret()
 	self->s.v.solid = SOLID_BSP;
 	self->s.v.movetype = MOVETYPE_PUSH;
 	self->s.v.classname = "door";
-	trap_setmodel( self, self->s.v.model );
-	trap_setorigin( self, PASSVEC3( self->s.v.origin ) );
+	setmodel( self, self->s.v.model );
+	setorigin( self, PASSVEC3( self->s.v.origin ) );
 
 	self->s.v.touch = ( func_t ) secret_touch;
 	self->s.v.blocked = ( func_t ) secret_blocked;

@@ -152,7 +152,7 @@ void GotoNextMap()
 	{
 		// configurable map lists, see if the current map exists as a
 		// serverinfo/localinfo var
-		trap_infokey( world, g_globalvars.mapname, newmap, sizeof( newmap ) );
+		infokey( world, g_globalvars.mapname, newmap, sizeof( newmap ) );
 
 		if ( newmap[0] )
 			trap_changelevel( newmap );
@@ -302,7 +302,7 @@ void ClientKill()
 
 	set_suicide_frame();
 	self->s.v.modelindex = modelindex_player;
-	trap_logfrag( self, self );
+	logfrag( self, self );
 	self->s.v.frags -= 2;	// extra penalty
 
 	respawn();
@@ -468,13 +468,13 @@ void PutClientInServer()
 
 
 // oh, this is a hack!
-	trap_setmodel( self, "progs/eyes.mdl" );
+	setmodel( self, "progs/eyes.mdl" );
 	modelindex_eyes = self->s.v.modelindex;
 
-	trap_setmodel( self, "progs/player.mdl" );
+	setmodel( self, "progs/player.mdl" );
 	modelindex_player = self->s.v.modelindex;
 
-	trap_setsize( self, PASSVEC3( VEC_HULL_MIN ), PASSVEC3( VEC_HULL_MAX ) );
+	setsize( self, PASSVEC3( VEC_HULL_MIN ), PASSVEC3( VEC_HULL_MAX ) );
 	SetVector( self->s.v.view_ofs, 0, 0, 22 );
 	SetVector( self->s.v.velocity, 0, 0, 0 );
 
@@ -488,7 +488,7 @@ void PutClientInServer()
 	spawn_tdeath( self->s.v.origin, self );
 
 	// Set Rocket Jump Modifiers
-	trap_infokey( world, "rj", s, sizeof( s ) );
+	infokey( world, "rj", s, sizeof( s ) );
 	if ( atof( s ) != 0 )
 	{
 		rj = atof( s );
@@ -497,7 +497,7 @@ void PutClientInServer()
 	if ( deathmatch == 4 )
 	{
 		self->s.v.ammo_shells = 0;
-		trap_infokey( world, "axe", s, sizeof( s ) );
+		infokey( world, "axe", s, sizeof( s ) );
 		if ( atof( s ) == 0 )
 		{
 			self->s.v.ammo_nails   = 255;
@@ -683,10 +683,10 @@ void PlayerJump()
 		{
 			self->swim_flag = g_globalvars.time + 1;
 			if ( g_random() < 0.5 )
-				trap_sound( self, CHAN_BODY, "misc/water1.wav", 1,
+				sound( self, CHAN_BODY, "misc/water1.wav", 1,
 					    ATTN_NORM );
 			else
-				trap_sound( self, CHAN_BODY, "misc/water2.wav", 1,
+				sound( self, CHAN_BODY, "misc/water2.wav", 1,
 					    ATTN_NORM );
 		}
 
@@ -703,7 +703,7 @@ void PlayerJump()
 	self->s.v.button2 = 0;
 
 // player jumping sound
-	trap_sound( self, CHAN_BODY, "player/plyrjmp8.wav", 1, ATTN_NORM );
+	sound( self, CHAN_BODY, "player/plyrjmp8.wav", 1, ATTN_NORM );
 }
 
 
@@ -726,9 +726,9 @@ void WaterMove()
 	if ( self->s.v.waterlevel != 3 )
 	{
 		if ( self->air_finished < g_globalvars.time )
-			trap_sound( self, CHAN_VOICE, "player/gasp2.wav", 1, ATTN_NORM );
+			sound( self, CHAN_VOICE, "player/gasp2.wav", 1, ATTN_NORM );
 		else if ( self->air_finished < g_globalvars.time + 9 )
-			trap_sound( self, CHAN_VOICE, "player/gasp1.wav", 1, ATTN_NORM );
+			sound( self, CHAN_VOICE, "player/gasp1.wav", 1, ATTN_NORM );
 
 		self->air_finished = g_globalvars.time + 12;
 		self->dmg = 2;
@@ -751,7 +751,7 @@ void WaterMove()
 		if ( ( ( int ) ( self->s.v.flags ) ) & FL_INWATER )
 		{
 			// play leave water sound
-			trap_sound( self, CHAN_BODY, "misc/outwater.wav", 1, ATTN_NORM );
+			sound( self, CHAN_BODY, "misc/outwater.wav", 1, ATTN_NORM );
 			self->s.v.flags -= FL_INWATER;
 		}
 		return;
@@ -785,11 +785,11 @@ void WaterMove()
 // player enter water sound
 
 		if ( self->s.v.watertype == CONTENT_LAVA )
-			trap_sound( self, CHAN_BODY, "player/inlava.wav", 1, ATTN_NORM );
+			sound( self, CHAN_BODY, "player/inlava.wav", 1, ATTN_NORM );
 		if ( self->s.v.watertype == CONTENT_WATER )
-			trap_sound( self, CHAN_BODY, "player/inh2o.wav", 1, ATTN_NORM );
+			sound( self, CHAN_BODY, "player/inh2o.wav", 1, ATTN_NORM );
 		if ( self->s.v.watertype == CONTENT_SLIME )
-			trap_sound( self, CHAN_BODY, "player/slimbrn2.wav", 1,
+			sound( self, CHAN_BODY, "player/slimbrn2.wav", 1,
 				    ATTN_NORM );
 
 		self->s.v.flags += FL_INWATER;
@@ -812,7 +812,7 @@ void CheckWaterJump()
 	VectorScale( g_globalvars.v_forward, 24, end );
 	VectorAdd( start, end, end );	//end = start + v_forward*24;
 
-	trap_traceline( PASSVEC3( start ), PASSVEC3( end ), true, self );
+	traceline( PASSVEC3( start ), PASSVEC3( end ), true, self );
 
 	if ( g_globalvars.trace_fraction < 1 )
 	{			// solid at waist
@@ -821,7 +821,7 @@ void CheckWaterJump()
 		VectorAdd( start, end, end );	//end = start + v_forward*24;
 		VectorScale( g_globalvars.trace_plane_normal, -50, self->s.v.movedir );	//self->s.v.movedir = trace_plane_normal * -50;
 
-		trap_traceline( PASSVEC3( start ), PASSVEC3( end ), true, self );
+		traceline( PASSVEC3( start ), PASSVEC3( end ), true, self );
 
 		if ( g_globalvars.trace_fraction == 1 )
 		{		// open at eye level
@@ -844,7 +844,7 @@ void ClientDisconnect()
 	G_bprint( PRINT_HIGH, "%s left the game with %.0f frags\n", self->s.v.netname,
 		  self->s.v.frags );
 
-	trap_sound( self, CHAN_BODY, "player/tornoff2.wav", 1, ATTN_NONE );
+	sound( self, CHAN_BODY, "player/tornoff2.wav", 1, ATTN_NONE );
 	set_suicide_frame();
 }
 
@@ -935,7 +935,7 @@ void CheckPowerups()
 // sound and screen flash when items starts to run out
 		if ( self->invisible_sound < g_globalvars.time )
 		{
-			trap_sound( self, CHAN_AUTO, "items/inv3.wav", 0.5, ATTN_IDLE );
+			sound( self, CHAN_AUTO, "items/inv3.wav", 0.5, ATTN_IDLE );
 			self->invisible_sound =
 			    g_globalvars.time + ( ( g_random() * 3 ) + 1 );
 		}
@@ -947,8 +947,8 @@ void CheckPowerups()
 			{
 				G_sprint( self, PRINT_HIGH,
 					  "Ring of Shadows magic is fading\n" );
-				trap_stuffcmd( self, "bf\n" );
-				trap_sound( self, CHAN_AUTO, "items/inv2.wav", 1,
+				stuffcmd( self, "bf\n" );
+				sound( self, CHAN_AUTO, "items/inv2.wav", 1,
 					    ATTN_NORM );
 				self->invisible_time = g_globalvars.time + 1;
 			}
@@ -956,7 +956,7 @@ void CheckPowerups()
 			if ( self->invisible_time < g_globalvars.time )
 			{
 				self->invisible_time = g_globalvars.time + 1;
-				trap_stuffcmd( self, "bf\n" );
+				stuffcmd( self, "bf\n" );
 			}
 		}
 
@@ -982,8 +982,8 @@ void CheckPowerups()
 			{
 				G_sprint( self, PRINT_HIGH,
 					  "Protection is almost burned out\n" );
-				trap_stuffcmd( self, "bf\n" );
-				trap_sound( self, CHAN_AUTO, "items/protect2.wav", 1,
+				stuffcmd( self, "bf\n" );
+				sound( self, CHAN_AUTO, "items/protect2.wav", 1,
 					    ATTN_NORM );
 				self->invincible_time = g_globalvars.time + 1;
 			}
@@ -991,7 +991,7 @@ void CheckPowerups()
 			if ( self->invincible_time < g_globalvars.time )
 			{
 				self->invincible_time = g_globalvars.time + 1;
-				trap_stuffcmd( self, "bf\n" );
+				stuffcmd( self, "bf\n" );
 			}
 		}
 
@@ -1026,8 +1026,8 @@ void CheckPowerups()
 				else
 					G_sprint( self, PRINT_HIGH,
 						  "Quad Damage is wearing off\n" );
-				trap_stuffcmd( self, "bf\n" );
-				trap_sound( self, CHAN_AUTO, "items/damage2.wav", 1,
+				stuffcmd( self, "bf\n" );
+				sound( self, CHAN_AUTO, "items/damage2.wav", 1,
 					    ATTN_NORM );
 				self->super_time = g_globalvars.time + 1;
 			}
@@ -1035,7 +1035,7 @@ void CheckPowerups()
 			if ( self->super_time < g_globalvars.time )
 			{
 				self->super_time = g_globalvars.time + 1;
-				trap_stuffcmd( self, "bf\n" );
+				stuffcmd( self, "bf\n" );
 			}
 		}
 
@@ -1074,8 +1074,8 @@ void CheckPowerups()
 			{
 				G_sprint( self, PRINT_HIGH,
 					  "Air supply in Biosuit expiring\n" );
-				trap_stuffcmd( self, "bf\n" );
-				trap_sound( self, CHAN_AUTO, "items/suit2.wav", 1,
+				stuffcmd( self, "bf\n" );
+				sound( self, CHAN_AUTO, "items/suit2.wav", 1,
 					    ATTN_NORM );
 				self->rad_time = g_globalvars.time + 1;
 			}
@@ -1083,7 +1083,7 @@ void CheckPowerups()
 			if ( self->rad_time < g_globalvars.time )
 			{
 				self->rad_time = g_globalvars.time + 1;
-				trap_stuffcmd( self, "bf\n" );
+				stuffcmd( self, "bf\n" );
 			}
 		}
 
@@ -1121,14 +1121,14 @@ void PlayerPostThink()
 	     && ( ( ( int ) ( self->s.v.flags ) ) & FL_ONGROUND ) )
 	{
 		if ( self->s.v.watertype == CONTENT_WATER )
-			trap_sound( self, CHAN_BODY, "player/h2ojump.wav", 1, ATTN_NORM );
+			sound( self, CHAN_BODY, "player/h2ojump.wav", 1, ATTN_NORM );
 		else if ( self->jump_flag < -650 )
 		{
 			self->deathtype = "falling";
 			T_Damage( self, world, world, 5 );
-			trap_sound( self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM );
+			sound( self, CHAN_VOICE, "player/land2.wav", 1, ATTN_NORM );
 		} else
-			trap_sound( self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM );
+			sound( self, CHAN_VOICE, "player/land.wav", 1, ATTN_NORM );
 	}
 
 	self->jump_flag = self->s.v.velocity[2];
@@ -1157,8 +1157,8 @@ void ClientObituary( gedict_t * targ, gedict_t * attacker )
 	rnum = g_random();
 	//ZOID 12-13-96: self.team doesn't work in QW.  Use keys
 
-	trap_infokey( attacker, "team", attackerteam, sizeof( attackerteam ) );
-	trap_infokey( targ, "team", targteam, sizeof( targteam ) );
+	infokey( attacker, "team", attackerteam, sizeof( attackerteam ) );
+	infokey( targ, "team", targteam, sizeof( targteam ) );
 
 	if ( streq( targ->s.v.classname, "player" ) )
 	{
@@ -1179,7 +1179,7 @@ void ClientObituary( gedict_t * targ, gedict_t * attacker )
 			G_bprint( PRINT_MEDIUM, "%s was telefragged by %s\n",
 				  targ->s.v.netname,
 				  PROG_TO_EDICT( attacker->s.v.owner )->s.v.netname );
-			trap_logfrag( PROG_TO_EDICT( attacker->s.v.owner ), targ );
+			logfrag( PROG_TO_EDICT( attacker->s.v.owner ), targ );
 
 			PROG_TO_EDICT( attacker->s.v.owner )->s.v.frags += 1;
 			return;
@@ -1191,7 +1191,7 @@ void ClientObituary( gedict_t * targ, gedict_t * attacker )
 				  targ->s.v.netname );
 
 			targ->s.v.frags = targ->s.v.frags - 1;
-			trap_logfrag( targ, targ );
+			logfrag( targ, targ );
 			return;
 		}
 		// double 666 telefrag (can happen often in deathmatch 4)
@@ -1202,7 +1202,7 @@ void ClientObituary( gedict_t * targ, gedict_t * attacker )
 				  targ->s.v.netname,
 				  PROG_TO_EDICT( attacker->s.v.owner )->s.v.netname );
 			targ->s.v.frags = targ->s.v.frags - 1;
-			trap_logfrag( targ, targ );
+			logfrag( targ, targ );
 			return;
 		}
 
@@ -1212,7 +1212,7 @@ void ClientObituary( gedict_t * targ, gedict_t * attacker )
 			if ( teamplay && streq( targteam, attackerteam )
 			     && strneq( attackerteam, "" ) && targ != attacker )
 			{
-				trap_logfrag( attacker, attacker );
+				logfrag( attacker, attacker );
 				attacker->s.v.frags = attacker->s.v.frags - 1;
 				G_bprint( PRINT_MEDIUM, "%s squished a teammate\n",
 					  attacker->s.v.netname );
@@ -1222,12 +1222,12 @@ void ClientObituary( gedict_t * targ, gedict_t * attacker )
 			{
 				G_bprint( PRINT_MEDIUM, "%s squishes %s\n",
 					  attacker->s.v.netname, targ->s.v.netname );
-				trap_logfrag( attacker, targ );
+				logfrag( attacker, targ );
 				attacker->s.v.frags = attacker->s.v.frags + 1;
 				return;
 			} else
 			{
-				trap_logfrag( targ, targ );
+				logfrag( targ, targ );
 				targ->s.v.frags = targ->s.v.frags - 1;	// killed self
 				G_bprint( PRINT_MEDIUM, "%s was squished\n",
 					  targ->s.v.netname );
@@ -1240,7 +1240,7 @@ void ClientObituary( gedict_t * targ, gedict_t * attacker )
 			if ( targ == attacker )
 			{
 				// killed self
-				trap_logfrag( attacker, attacker );
+				logfrag( attacker, attacker );
 				attacker->s.v.frags = attacker->s.v.frags - 1;
 				G_bprint( PRINT_MEDIUM, targ->s.v.netname );
 				if ( streq( targ->deathtype, "grenade" ) )
@@ -1280,11 +1280,11 @@ void ClientObituary( gedict_t * targ, gedict_t * attacker )
 					  deathstring );
 				attacker->s.v.frags = attacker->s.v.frags - 1;
 				//ZOID 12-13-96:  killing a teammate logs as suicide
-				trap_logfrag( attacker, attacker );
+				logfrag( attacker, attacker );
 				return;
 			} else
 			{
-				trap_logfrag( attacker, targ );
+				logfrag( attacker, targ );
 				attacker->s.v.frags = attacker->s.v.frags + 1;
 
 				rnum = attacker->s.v.weapon;
@@ -1362,7 +1362,7 @@ void ClientObituary( gedict_t * targ, gedict_t * attacker )
 			return;
 		} else
 		{
-			trap_logfrag( targ, targ );
+			logfrag( targ, targ );
 			targ->s.v.frags = targ->s.v.frags - 1;	// killed self
 			rnum = targ->s.v.watertype;
 

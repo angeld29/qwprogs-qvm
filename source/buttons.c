@@ -68,7 +68,7 @@ void button_fire()
 	if ( self->state == STATE_UP || self->state == STATE_TOP )
 		return;
 
-	trap_sound( self, CHAN_VOICE, self->s.v.noise, 1, ATTN_NORM );
+	sound( self, CHAN_VOICE, self->s.v.noise, 1, ATTN_NORM );
 
 	self->state = STATE_UP;
 
@@ -146,7 +146,7 @@ void SP_func_button()
 
 	self->s.v.movetype = MOVETYPE_PUSH;
 	self->s.v.solid = SOLID_BSP;
-	trap_setmodel( self, self->s.v.model );
+	setmodel( self, self->s.v.model );
 
 	self->s.v.blocked = ( func_t ) button_blocked;
 	self->s.v.use = ( func_t ) button_use;

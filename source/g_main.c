@@ -4,8 +4,8 @@ entity          self;
 entity          other;
 entity          world;
 entity          newmis;                         // if this is set, the entity that just
-        // run created a new missile that should
-        // be simulated immediately
+        					// run created a new missile that should
+        					// be simulated immediately
 entity          trace_ent;
 entity          msg_entity;                             // destination of single entity writes
 
@@ -26,7 +26,7 @@ static char     worldmodel[64] = "worldmodel";
 static char     netnames[MAX_CLIENTS][32];
 
 gameData_t      gamedata =
-    { ( edict_t * ) g_edicts, sizeof( gedict_t ), &g_globalvars, expfields };
+    { ( edict_t * ) g_edicts, sizeof( gedict_t ), &g_globalvars, expfields , GAME_API_VERSION};
 float           starttime;
 void            G_InitGame( int levelTime, int randomSeed );
 void            StartFrame( int time );
