@@ -1,2 +1,2 @@
-g_globalvars.newmis
+need set g_globalvars.newmis
 

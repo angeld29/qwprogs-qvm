@@ -287,5 +287,5 @@ void G_EdictBlocked()
 
 void ClearGlobals()
 {
-	damage_attacker = damage_inflictor = activator = self = other = world;
+	damage_attacker = damage_inflictor = activator = self = other = newmis = world;
 }
