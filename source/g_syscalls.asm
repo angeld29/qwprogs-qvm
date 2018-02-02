@@ -23,6 +23,7 @@ equ    trap_stuffcmd         -20
 equ    trap_localcmd         -21
 equ    trap_cvar             -22
 equ    trap_cvar_set         -23
+equ    trap_findradius	     -24
                              
 equ    trap_walkmove         -25
 equ    trap_droptofloor      -26
@@ -57,5 +58,45 @@ equ	sqrt			-53
 equ     floor			-54
 equ	ceil			-55
 equ     acos			-56
-equ     trap_CmdArgc            -57                
+equ     trap_CmdArgc            -57
 equ     trap_CmdArgv            -58
+
+equ     trap_TraceCapsule        -59
+
+equ	trap_FS_OpenFile         -60
+equ    	trap_FS_CloseFile        -61
+equ    	trap_FS_ReadFile         -62
+equ    	trap_FS_WriteFile        -63
+equ	trap_FS_SeekFile         -64
+equ	trap_FS_TellFile         -65
+equ	trap_FS_GetFileList	 -66
+
+equ     trap_cvar_set_float      -67
+equ     trap_cvar_string	 -68
+
+equ     trap_Map_Extension	 -69
+
+equ     strcmp	 		 -70
+equ     strncmp	 		 -71
+equ     stricmp	 		 -72
+equ     strnicmp		 -73
+
+equ     trap_find		 -74
+
+equ     trap_executecmd		 -75
+equ     trap_conprint		 -76
+equ     trap_readcmd		 -77
+equ     trap_redirectcmd         -78
+
+equ	trap_AddBot		 -79
+equ	trap_RemoveBot		 -80
+equ	trap_SetBotUserInfo	 -81
+equ	trap_SetBotCMD		 -82
+
+equ		QVMstrftime		 -83
+equ		trap_CmdArgs     -84
+equ		trap_CmdTokenize -85
+equ		strlcpy			 -86
+equ		strlcat			 -87
+equ		trap_makevectors			 -88
+equ		trap_nextclient			 -89

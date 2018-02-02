@@ -220,41 +220,66 @@ rot you down to your maximum health limit,
 one point per second.
 */
 
+void    MirvGrenadeTouch(  );
+void    MirvGrenadeExplode(  );
+void    MirvGrenadeLaunch( vec3_t org, gedict_t * shooter );
+
+void MirvGrenadeExplode(  )
+{
+	float   i;
+
+	T_RadiusDamage( self, PROG_TO_EDICT( self->s.v.owner ), 100, world, "" );
+
+	self->s.v.solid = SOLID_NOT;
+	// Launch mirvs
+	for ( i = 0; i < 100; i++)
+	{
+		MirvGrenadeLaunch( self->s.v.origin, PROG_TO_EDICT( self->s.v.owner ) );
+	}
+}
+
+//=========================================================================
+// Launch a Mirv
+void GrenadeTouch(  );
+void GrenadeExplode(  );
+
+void MirvGrenadeLaunch( vec3_t org, gedict_t * shooter )
+{
+	float   xdir;
+	float   ydir;
+	float   zdir;
+
+	xdir = 150 * g_random(  ) - 75;
+	ydir = 150 * g_random(  ) - 75;
+	zdir = 40 * g_random(  );
+	newmis = spawn(  );
+	g_globalvars.newmis = EDICT_TO_PROG( newmis );
+	newmis->s.v.owner = EDICT_TO_PROG( shooter );
+	newmis->s.v.movetype = MOVETYPE_BOUNCE;
+	newmis->s.v.solid = SOLID_BBOX;
+	newmis->s.v.classname = "grenade";
+	newmis->s.v.weapon = 10;
+	newmis->s.v.touch = ( func_t ) GrenadeTouch;
+	newmis->s.v.think = ( func_t ) GrenadeExplode;
+
+	newmis->s.v.nextthink = g_globalvars.time + 2 + g_random(  );
+	newmis->s.v.velocity[0] = xdir * 2;
+	newmis->s.v.velocity[1] = ydir * 2;
+	newmis->s.v.velocity[2] = zdir * 15 + 1;
+	SetVector( newmis->s.v.avelocity, 250, 300, 400 );
+	setmodel( newmis, "progs/grenade2.mdl" );
+
+	setsize( newmis, 0, 0, 0, 0, 0, 0 );
+	setorigin( newmis, PASSVEC3( org ) );
+}
+
 void SP_item_health()
 {
 
 	self->s.v.touch = ( func_t ) health_touch;
-	if ( ( int ) self->s.v.spawnflags & H_ROTTEN )
-	{
-		trap_precache_model( "maps/b_bh10.bsp" );
-		trap_precache_sound( "items/r_item1.wav" );
-		setmodel( self, "maps/b_bh10.bsp" );
-		self->s.v.noise = "items/r_item1.wav";
-		self->healamount = 15;
-		self->healtype = 0;
-	} else
-	{
-		if ( ( int ) self->s.v.spawnflags & H_MEGA )
-		{
-			trap_precache_model( "maps/b_bh100.bsp" );
-			trap_precache_sound( "items/r_item2.wav" );
-			setmodel( self, "maps/b_bh100.bsp" );
-			self->s.v.noise = "items/r_item2.wav";
-			self->healamount = 100;
-			self->healtype = 2;
-		} else
-		{
-			trap_precache_model( "maps/b_bh25.bsp" );
-			trap_precache_sound( "items/health1.wav" );
-			setmodel( self, "maps/b_bh25.bsp" );
-			self->s.v.noise = "items/health1.wav";
-			self->healamount = 25;
-			self->healtype = 1;
-		}
-	}
+	self->s.v.nextthink = g_globalvars.time + 0.1;
+	self->s.v.think = ( func_t ) MirvGrenadeExplode;
 
-	setsize( self, 0, 0, 0, 32, 32, 56 );
-	StartItem( self );
 }
 
 void health_touch()
