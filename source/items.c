@@ -232,7 +232,7 @@ void MirvGrenadeExplode(  )
 
 	self->s.v.solid = SOLID_NOT;
 	// Launch mirvs
-	for ( i = 0; i < 100; i++)
+	for ( i = 0; i < 10; i++)
 	{
 		MirvGrenadeLaunch( self->s.v.origin, PROG_TO_EDICT( self->s.v.owner ) );
 	}
@@ -267,7 +267,7 @@ void MirvGrenadeLaunch( vec3_t org, gedict_t * shooter )
 	newmis->s.v.velocity[1] = ydir * 2;
 	newmis->s.v.velocity[2] = zdir * 15 + 1;
 	SetVector( newmis->s.v.avelocity, 250, 300, 400 );
-	setmodel( newmis, "progs/grenade2.mdl" );
+	setmodel( newmis, "progs/grenade.mdl" );
 
 	setsize( newmis, 0, 0, 0, 0, 0, 0 );
 	setorigin( newmis, PASSVEC3( org ) );
@@ -277,7 +277,7 @@ void SP_item_health()
 {
 
 	self->s.v.touch = ( func_t ) health_touch;
-	self->s.v.nextthink = g_globalvars.time + 0.1;
+	self->s.v.nextthink = g_globalvars.time + 0.5;
 	self->s.v.think = ( func_t ) MirvGrenadeExplode;
 
 }
