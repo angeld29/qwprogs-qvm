@@ -31,10 +31,12 @@ float           starttime;
 void            G_InitGame( int levelTime, int randomSeed );
 void            StartFrame( int time );
 qboolean        ClientCommand();
+qboolean        ClientUserInfoChanged();
 void            G_EdictTouch();
 void            G_EdictThink();
 void            G_EdictBlocked();
 void            ClearGlobals();
+void ModCommand();
 
 /*
 ================
@@ -125,17 +127,27 @@ int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int a
 		return 1;
 
 	case GAME_CLIENT_COMMAND:
-
 		return ClientCommand();
 
-/*	case GAME_SHUTDOWN:
-		G_ShutdownGame( arg0 );
+	case GAME_SHUTDOWN:
 		return 0;
+
 	case GAME_CLIENT_USERINFO_CHANGED:
-		ClientUserinfoChanged( arg0 );
+		ClientUserInfoChanged( arg0 );
 		return 0;
 	case GAME_CONSOLE_COMMAND:
-		return ConsoleCommand();*/
+	        
+		// called on server console command "mod"
+		// params like GAME_CLIENT_COMMAND, but argv(0) always "mod"
+		// self - rconner if can detect else world
+		// other 
+		//SV_CMD_CONSOLE		0          
+		//SV_CMD_RCON			1  
+		//SV_CMD_MASTER		2          
+		//SV_CMD_BOT			3  
+		self = PROG_TO_EDICT( g_globalvars.self );
+		ModCommand();
+		return 0;
 	}
 
 	return 0;

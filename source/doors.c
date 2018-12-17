@@ -654,7 +654,7 @@ void fd_secret_use( gedict_t * attacker, float take )
 
 	if ( !( ( int ) ( self->s.v.spawnflags ) & SECRET_NO_SHOOT ) )
 	{
-		self->th_pain = NULL;	//SUB_Null;
+		self->th_pain = (th_pain_funcref_t) (0);	//SUB_Null;
 		self->s.v.takedamage = DAMAGE_NO;
 	}
 

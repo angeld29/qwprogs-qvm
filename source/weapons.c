@@ -1222,7 +1222,7 @@ void CheatCommand()
 {
 //      if (deathmatch || coop)
 	return;
-
+/*
 	self->s.v.ammo_rockets = 100;
 	self->s.v.ammo_nails = 200;
 	self->s.v.ammo_shells = 100;
@@ -1240,6 +1240,7 @@ void CheatCommand()
 	self->s.v.weapon = IT_ROCKET_LAUNCHER;
 	impulse = 0;
 	W_SetCurrentAmmo();
+*/
 }
 
 /*

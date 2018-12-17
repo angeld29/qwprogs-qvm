@@ -19,6 +19,10 @@ typedef struct shared_edict_s {
 // other fields from progs come immediately after
 } edict_t;
 
+struct gedict_s;
+typedef void (*th_die_funcref_t)();
+typedef void (*th_pain_funcref_t)(struct gedict_s *, float);
+
 //typedef (void(*)(gedict_t *)) one_edict_func;
 typedef struct gedict_s {
 	edict_t         s;
@@ -92,6 +96,7 @@ typedef struct gedict_s {
 	char           *deathtype;	// keeps track of how the player died
 	float           dmgtime;
 
-	void            ( *th_die ) ();
-	void            ( *th_pain ) ( struct gedict_s *, float );
+	th_die_funcref_t   th_die;
+	th_pain_funcref_t  th_pain;
+
 } gedict_t;

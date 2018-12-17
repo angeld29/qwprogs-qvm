@@ -19,3 +19,17 @@ qboolean 	ClientCommand()
 	//G_Printf("ClientCommand %s\n",cmd_command);
 	return false;
 }
+
+qboolean ClientUserInfoChanged(  )
+{
+	char    key[1024];
+	char    value[1024];
+
+	self = PROG_TO_EDICT( g_globalvars.self );
+
+	trap_CmdArgv( 1, key, sizeof( key ) );
+	trap_CmdArgv( 2, value, sizeof( value ) );
+
+	return 0;
+
+}

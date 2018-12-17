@@ -51,7 +51,9 @@ set cc=lcc -DQ3_VM -S -Wf-target=bytecode -Wf-g -I..\ %1
 @if errorlevel 1 goto quit
 %cc%  ../world.c
 @if errorlevel 1 goto quit
-
+%cc%  ../g_mod_command.c
+@if errorlevel 1 goto quit
+    
 q3asm -f ../game
 :quit
 cd ..
