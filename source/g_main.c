@@ -51,6 +51,8 @@ int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int a
 	switch ( command )
 	{
 	case GAME_INIT:
+		G_Printf( "Init Game %d\n" , trap_GetApiVersion());
+
 		if ( trap_GetApiVersion() < GAME_API_VERSION )
 			return 0;
 

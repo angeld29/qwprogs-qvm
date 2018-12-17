@@ -49,6 +49,8 @@ int atoi( const char *string );
 int _atoi( const char **stringPtr );
 
 int vsprintf( char *buffer, const char *fmt, va_list argptr );
+int _vsnprintf( char *buffer, size_t size, const char *fmt, va_list argptr );
+int _snprintf(char *buffer, int size, const char *fmt, ...);
 int sscanf( const char *buffer, const char *fmt, ... );
 
 // Memory functions
@@ -64,7 +66,8 @@ double sin( double x );
 double cos( double x );
 double atan2( double y, double x );
 double tan( double x );
-int abs( int n );
 double fabs( double x );
 double acos( double x );
-
+int abs( int n );
+float asin( float x );
+int memcmp (const void *s1, const void *s2, size_t n);
