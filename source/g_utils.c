@@ -57,7 +57,8 @@ gedict_t *nextent( gedict_t * ent )
 
 gedict_t *find( gedict_t * start, int fieldoff, char *str )
 {
-	gedict_t *e;
+    return (gedict_t*) trap_find( start, fieldoff, str );
+	/*gedict_t *e;
 	char   *s;
 
 	if ( !start )
@@ -68,7 +69,7 @@ gedict_t *find( gedict_t * start, int fieldoff, char *str )
 		if ( s && !strcmp( s, str ) )
 			return e;
 	}
-	return NULL;
+	return NULL;*/
 }
 
 
