@@ -1,0 +1,2 @@
+sudo apt-get install cpp-arm-linux-gnueabihf libc6-armel-cross libc6-dev-armel-cross binutils-arm-linux-gnueabi
+sudo apt install gcc-multilib
