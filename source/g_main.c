@@ -210,7 +210,7 @@ void G_InitGame( int levelTime, int randomSeed )
 	srand( randomSeed );
 	framecount = 0;
 	starttime = levelTime * 0.001;
-	G_Printf( "Init Game\n" );
+	G_Printf( "Init Game %d %d %d\n", sizeof(edict_t),sizeof(entvars_t),sizeof(edict_t)-sizeof(entvars_t) );
 	G_InitMemory();
 	memset( g_edicts, 0, sizeof( gedict_t ) * MAX_EDICTS );
 

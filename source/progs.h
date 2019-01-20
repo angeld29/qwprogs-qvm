@@ -14,6 +14,8 @@ typedef struct shared_edict_s {
 	float           freetime;	// sv.time when the object was freed
 	//double                lastruntime;            // sv.time when SV_RunEntity was last
 	float           lastruntime1, lastruntime2;	//VM not support double // called for this edict (Tonik)
+	
+	//void			*ptr; // this points to sv_edict_t but mod should NOT bother about that...
 
 	entvars_t       v;	// C exported fields from progs
 // other fields from progs come immediately after
