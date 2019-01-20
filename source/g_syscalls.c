@@ -219,7 +219,7 @@ int trap_walkmove( int edn, float yaw, float dist )
 	return syscall( G_WALKMOVE, edn, PASSFLOAT( yaw), PASSFLOAT( dist ));
 }
 
-intptr_t trap_movetogoal( float dist )
+int trap_movetogoal( float dist )
 {
 	return syscall( G_MOVETOGOAL, PASSFLOAT( dist ) );
 }
@@ -429,7 +429,7 @@ int 	trap_SetBotCMD( int edn,int msec, float angles_x, float angles_y, float ang
                                 forwardmove, sidemove, upmove, buttons, impulse );
 }
 
-void 	trap_setpause( intptr_t pause )
+void 	trap_setpause( int pause )
 {
 	syscall( G_SETPAUSE, pause );
 }
@@ -454,16 +454,16 @@ gedict_t* trap_nextclient( gedict_t *v )
 #if defined( __linux__ ) || defined( _WIN32 ) /* || defined( __APPLE__ ) require?*/
 size_t strlcpy(char *dst, char *src, size_t siz)
 {
-	return syscall( g_strlcpy, (intptr_t)dst, (intptr_t)src, (intptr_t)siz );
+	return syscall( g_strlcpy, (int)dst, (int)src, (int)siz );
 }
 
 size_t strlcat(char *dst, char *src, size_t siz)
 {
-	return syscall( g_strlcat, (intptr_t)dst, (intptr_t)src, (intptr_t)siz );
+	return syscall( g_strlcat, (int)dst, (int)src, (int)siz );
 }
 #endif
 
-intptr_t 	trap_SetUserInfo( int edn, const char* varname, const char* value, int flags )
+int 	trap_SetUserInfo( int edn, const char* varname, const char* value, int flags )
 {
         return syscall( G_SETUSERINFO, edn, (int)varname, (int)value, flags );
 }

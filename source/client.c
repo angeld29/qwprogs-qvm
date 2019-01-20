@@ -147,7 +147,7 @@ void GotoNextMap()
 //ZOID: 12-13-96, samelevel is overloaded, only 1 works for same level
 
 	if ( trap_cvar( "samelevel" ) == 1 )	// if samelevel is set, stay on same level
-		trap_changelevel( g_globalvars.mapname );
+		trap_changelevel( g_globalvars.mapname, "" );
 	else
 	{
 		// configurable map lists, see if the current map exists as a
@@ -155,9 +155,9 @@ void GotoNextMap()
 		infokey( world, g_globalvars.mapname, newmap, sizeof( newmap ) );
 
 		if ( newmap[0] )
-			trap_changelevel( newmap );
+			trap_changelevel( newmap, "" );
 		else
-			trap_changelevel( nextmap );
+			trap_changelevel( nextmap, "" );
 	}
 }
 
