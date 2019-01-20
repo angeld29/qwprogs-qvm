@@ -1,3 +1,28 @@
+/*
+ *  QWProgs-DM
+ *  Copyright (C) 2004  [sd] angel
+ *
+ *  This code is based on Q3 VM code by Id Software, Inc.
+ *
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ *
+ *  $Id$
+ */
+
 #include "g_local.h"
 /* global 4 fix
 entity          self;
@@ -147,6 +172,22 @@ int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int a
 		//SV_CMD_BOT			3  
 		self = PROG_TO_EDICT( g_globalvars.self );
 		ModCommand();
+		return 0;
+	case GAME_CLIENT_SAY:
+		// called on user /say or /say_team
+		// arg0 non zero if say_team
+		// return non zero if say/say_team handled by mod
+		// params like GAME_CLIENT_COMMAND
+
+		return 0;
+
+	case GAME_PAUSED_TIC:
+		// called every frame when the game is paused
+		return 0;
+
+	case GAME_CLEAR_EDICT:
+		// Don't ClearGlobals() as this will be called during spawn()
+		//initialise_spawned_ent(PROG_TO_EDICT( g_globalvars.self ));
 		return 0;
 	}
 

@@ -80,9 +80,9 @@ void trap_BPrint( int level, const char *fmt )
 	syscall( G_BPRINT, level, (int) fmt );
 }
 
-void trap_SPrint( int edn, int level, const char *fmt )
+void trap_SPrint( int edn, int level, const char *fmt, int flags )
 {
-	syscall( G_SPRINT, edn, level, (int)fmt );
+	syscall( G_SPRINT, edn, level, (int)fmt, flags );
 }
 void trap_CenterPrint( int edn, const char *fmt )
 {
@@ -113,12 +113,10 @@ void trap_precache_model( char *name )
 	syscall( G_PRECACHE_MODEL, (int) name );
 }
 
-#ifdef VWEP_TEST
 void trap_precache_vwep_model( int pos, char *name )
 {
 	syscall( G_PRECACHE_VWEP_MODEL, pos, (int) name );
 }
-#endif
 
 void trap_setorigin( int edn, float origin_x, float origin_y, float origin_z )
 {
@@ -162,9 +160,9 @@ void trap_traceline( float v1_x, float v1_y, float v1_z, float v2_x, float v2_y,
 		 edn );
 }
 
-void trap_stuffcmd( int edn, const char *fmt )
+void trap_stuffcmd( int edn, const char *fmt, int flags )
 {
-	syscall( G_STUFFCMD, edn, (int)fmt );
+	syscall( G_STUFFCMD, edn, (int)fmt, flags);
 }
 
 void trap_localcmd( const char *fmt )
@@ -218,8 +216,12 @@ int trap_droptofloor( int edn )
 
 int trap_walkmove( int edn, float yaw, float dist )
 {
-	return syscall( G_WALKMOVE, edn, PASSFLOAT( yaw),
-			PASSFLOAT( dist ));
+	return syscall( G_WALKMOVE, edn, PASSFLOAT( yaw), PASSFLOAT( dist ));
+}
+
+intptr_t trap_movetogoal( float dist )
+{
+	return syscall( G_MOVETOGOAL, PASSFLOAT( dist ) );
 }
 
 void trap_lightstyle( int style, const char *val )
@@ -247,6 +249,7 @@ gedict_t* trap_find( gedict_t* ent,int fofs, const char*str )
 {
 	return (gedict_t*)syscall( G_Find, (int)ent, fofs, (int)str );
 }
+
 gedict_t*	trap_findradius( gedict_t* ent, float*org, float rad )
 {
         return (gedict_t*)syscall( G_FINDRADIUS, (int)ent, (int)org, PASSFLOAT(rad) );
@@ -262,9 +265,9 @@ void trap_setspawnparam( int edn )
 	syscall( G_SETSPAWNPARAMS, edn );
 }
 
-void trap_changelevel( char *name )
+void trap_changelevel( char *name, const char* entityname )
 {
-	syscall( G_CHANGELEVEL, name );
+	syscall( G_CHANGELEVEL, name, entityname );
 }
 
 int trap_multicast( float origin_x, float origin_y, float origin_z, int to )
@@ -403,7 +406,6 @@ int trap_Map_Extension( const char* ext_name, int mapto)
 	return syscall( G_Map_Extension, (int)ext_name, mapto );
 }
 
-
 int 	trap_AddBot( const char* name, int bottomcolor, int topcolor, const char* skin)
 {
         return syscall( G_Add_Bot, (int)name, bottomcolor, topcolor, (int)skin );
@@ -427,6 +429,12 @@ int 	trap_SetBotCMD( int edn,int msec, float angles_x, float angles_y, float ang
                                 forwardmove, sidemove, upmove, buttons, impulse );
 }
 
+void 	trap_setpause( intptr_t pause )
+{
+	syscall( G_SETPAUSE, pause );
+}
+
+
 int QVMstrftime( char *valbuff, int sizebuff, const char *fmt, int offset )
 {
 	return syscall( G_QVMstrftime, (int)valbuff, sizebuff, (int)fmt, offset );
@@ -443,3 +451,19 @@ gedict_t* trap_nextclient( gedict_t *v )
 	return (gedict_t*)syscall( G_NEXTCLIENT, (int)v );
 }
 
+#if defined( __linux__ ) || defined( _WIN32 ) /* || defined( __APPLE__ ) require?*/
+size_t strlcpy(char *dst, char *src, size_t siz)
+{
+	return syscall( g_strlcpy, (intptr_t)dst, (intptr_t)src, (intptr_t)siz );
+}
+
+size_t strlcat(char *dst, char *src, size_t siz)
+{
+	return syscall( g_strlcat, (intptr_t)dst, (intptr_t)src, (intptr_t)siz );
+}
+#endif
+
+intptr_t 	trap_SetUserInfo( int edn, const char* varname, const char* value, int flags )
+{
+        return syscall( G_SETUSERINFO, edn, (int)varname, (int)value, flags );
+}
