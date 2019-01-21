@@ -74,13 +74,14 @@ This must be the very first function compiled into the .q3vm file
 int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5,
 	    int arg6, int arg7, int arg8, int arg9, int arg10, int arg11 )
 {
+	int api_ver;
 	ClearGlobals();
 	switch ( command )
 	{
 	case GAME_INIT:
-		G_Printf( "Init Game %d\n" , trap_GetApiVersion());
-
-		if ( trap_GetApiVersion() < GAME_API_VERSION )
+        api_ver = trap_GetApiVersion();
+                G_dprint( "Init Game %d %d %d %d %d\n", api_ver, GAME_API_VERSION, sizeof( edict_t), sizeof( entvars_t), sizeof( edict_t)- sizeof( entvars_t) );
+		if (  api_ver < GAME_API_VERSION )
 			return 0;
 
 		G_InitGame( arg0, arg1 );
@@ -251,7 +252,6 @@ void G_InitGame( int levelTime, int randomSeed )
 	srand( randomSeed );
 	framecount = 0;
 	starttime = levelTime * 0.001;
-	G_Printf( "Init Game %d %d %d\n", sizeof(edict_t),sizeof(entvars_t),sizeof(edict_t)-sizeof(entvars_t) );
 	G_InitMemory();
 	memset( g_edicts, 0, sizeof( gedict_t ) * MAX_EDICTS );
 
