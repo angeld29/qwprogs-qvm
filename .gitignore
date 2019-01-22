@@ -1,0 +1,9 @@
+Makefile
+src/Makefile.dl
+src/Makefile.vm
+*.o
+tags
+VM/
+.vs/
+CMakeBuilds/
+bin/
