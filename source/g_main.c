@@ -86,10 +86,24 @@ void initialise_spawned_ent(gedict_t* ent);
    This must be the very first function compiled into the .q3vm file
    ================
    */
+#define RestoreGlobals()  \
+    damage_attacker = damage_attacker;\
+    damage_inflictor = damage_inflictor_; \
+    activator = activator_; \
+    self = self_; \
+    other = other_; \
+    newmis = newmis_; 
 int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5,
         int arg6, int arg7, int arg8, int arg9, int arg10, int arg11 )
 {
     int api_ver;
+    gedict_t* damage_attacker_= damage_attacker;
+    gedict_t* damage_inflictor_= damage_inflictor;
+    gedict_t* activator_ = activator ;
+    gedict_t* self_ = self;
+    gedict_t* other_ = other;
+    gedict_t* newmis_ = newmis;
+
     ClearGlobals();
     switch ( command )
     {
@@ -103,19 +117,23 @@ int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int a
             if ( api_ver < MIN_API_VERSION ) 
             {
                 G_conprintf("Mod requried API_VERSION %d or higher, server have %d\n", MIN_API_VERSION, api_ver);
+                RestoreGlobals();
                 return 0;
             }
 
             G_InitGame( arg0, arg1 );
+            RestoreGlobals();
             return ( int ) ( &gamedata );
 
         case GAME_LOADENTS:
             infokey( world, "mapname", mapname, sizeof(mapname) );
             G_SpawnEntitiesFromString();
+            RestoreGlobals();
             return 1;
 
         case GAME_START_FRAME:
             StartFrame( arg0 );
+            RestoreGlobals();
             return 1;
 
         case GAME_CLIENT_CONNECT:
@@ -126,12 +144,14 @@ int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int a
                 SpectatorConnect();
             else
                 ClientConnect();
+            RestoreGlobals();
             return 1;
 
         case GAME_PUT_CLIENT_IN_SERVER:
             self = PROG_TO_EDICT( g_globalvars.self );
             if ( !arg0 )
                 PutClientInServer();
+            RestoreGlobals();
             return 1;
 
         case GAME_CLIENT_DISCONNECT:
@@ -140,16 +160,19 @@ int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int a
                 SpectatorDisconnect();
             else
                 ClientDisconnect();
+            RestoreGlobals();
             return 1;
 
         case GAME_SETNEWPARMS:
             SetNewParms();
+            RestoreGlobals();
             return 1;
 
         case GAME_CLIENT_PRETHINK:
             self = PROG_TO_EDICT( g_globalvars.self );
             if ( !arg0 )
                 PlayerPreThink();
+            RestoreGlobals();
             return 1;
 
         case GAME_CLIENT_POSTTHINK:
@@ -158,33 +181,44 @@ int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int a
                 PlayerPostThink();
             else
                 SpectatorThink();
+            RestoreGlobals();
             return 1;
 
         case GAME_EDICT_TOUCH:
             G_EdictTouch();
+            RestoreGlobals();
             return 1;
 
         case GAME_EDICT_THINK:
             G_EdictThink();
+            RestoreGlobals();
             return 1;
 
         case GAME_EDICT_BLOCKED:
             G_EdictBlocked();
+            RestoreGlobals();
             return 1;
 
         case GAME_SETCHANGEPARMS:
             self = PROG_TO_EDICT( g_globalvars.self );
             SetChangeParms();
+            RestoreGlobals();
             return 1;
 
         case GAME_CLIENT_COMMAND:
+            RestoreGlobals();
             return ClientCommand();
 
         case GAME_SHUTDOWN:
+            RestoreGlobals();
             return 0;
 
         case GAME_CLIENT_USERINFO_CHANGED:
-            return arg0?ClientUserInfoChanged():ClientUserInfoChanged_after();
+            {
+                int ret = arg0?ClientUserInfoChanged():ClientUserInfoChanged_after();
+                RestoreGlobals();
+                return ret;
+            }
         case GAME_CONSOLE_COMMAND:
 
             // called on server console command "mod"
@@ -197,6 +231,7 @@ int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int a
             //SV_CMD_BOT			3  
             self = PROG_TO_EDICT( g_globalvars.self );
             ModCommand();
+            RestoreGlobals();
             return 0;
         case GAME_CLIENT_SAY:
             // called on user /say or /say_team
@@ -204,15 +239,18 @@ int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int a
             // return non zero if say/say_team handled by mod
             // params like GAME_CLIENT_COMMAND
 
+            RestoreGlobals();
             return 0;
 
         case GAME_PAUSED_TIC:
             // called every frame when the game is paused
+            RestoreGlobals();
             return 0;
 
         case GAME_CLEAR_EDICT:
             // Don't ClearGlobals() as this will be called during spawn()
             initialise_spawned_ent(PROG_TO_EDICT( g_globalvars.self ));
+            RestoreGlobals();
             return 0;
     }
 

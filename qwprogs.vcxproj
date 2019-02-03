@@ -58,7 +58,6 @@
     <SccProjectName />
     <SccLocalPath />
     <ProjectGuid>{0882CB0D-D5DF-4A4E-BE12-54400C7A2D4D}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -139,7 +138,7 @@
       <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <OutputFile>D:\games\qwtf\qw\qw32dbg.dll</OutputFile>
+      <OutputFile>bin\qw32dbg.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ModuleDefinitionFile>.\game.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -180,7 +179,7 @@
       <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <OutputFile>D:\games\qwtf\qw\qw64dbg.dll</OutputFile>
+      <OutputFile>bin\qw64dbg.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ModuleDefinitionFile>.\game.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -220,7 +219,7 @@
       <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <OutputFile>.\Release/qwprogs.dll</OutputFile>
+      <OutputFile>bin/qwprogs.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ModuleDefinitionFile>.\src\game.def</ModuleDefinitionFile>
       <ProgramDatabaseFile>.\Release/qwprogs.pdb</ProgramDatabaseFile>
@@ -263,7 +262,7 @@
       <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <OutputFile>.\Release/qwprogs.dll</OutputFile>
+      <OutputFile>bir/qwprogs64.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ModuleDefinitionFile>.\src\game.def</ModuleDefinitionFile>
       <ProgramDatabaseFile>.\Release/qwprogs.pdb</ProgramDatabaseFile>

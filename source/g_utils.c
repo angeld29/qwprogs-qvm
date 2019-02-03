@@ -63,13 +63,14 @@ int i_rnd( int from, int to )
 	return bound(from, r, to);
 }
 
-
+void initialise_spawned_ent(gedict_t* ent);
 gedict_t *spawn(  )
 {
 	gedict_t *t = &g_edicts[trap_spawn(  )];
 
 	if ( !t || t == world )
 		DebugTrap( "spawn return world\n" );
+    initialise_spawned_ent(t);
 	return t;
 }
 
