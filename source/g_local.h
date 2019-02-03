@@ -82,6 +82,10 @@ void    	logfrag( gedict_t * killer, gedict_t * killee );
 void    	infokey( gedict_t * ed, const char *key, char *valbuff, int sizebuff );
 void    	WriteEntity( int to, gedict_t * ed );
 void    	disableupdates( gedict_t * ed, float time );
+float cvar( const char *var );
+char *cvar_string( const char *var );
+void cvar_set( const char *var, const char *val );
+void cvar_fset( const char *var, float val );
 
 //
 //  subs.c
