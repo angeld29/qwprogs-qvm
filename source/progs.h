@@ -2,8 +2,6 @@
 
 
 typedef struct shared_edict_s {
-	void			*ptr; // this points to sv_edict_t but mod should NOT bother about that...
-
 	entvars_t       v;	// C exported fields from progs
 // other fields from progs come immediately after
 } edict_t;
@@ -15,7 +13,20 @@ typedef void (*th_pain_funcref_t)(struct gedict_s *, float);
 //typedef (void(*)(gedict_t *)) one_edict_func;
 typedef struct gedict_s {
 	edict_t         s;
+
 	//custom fields
+	float	items2;				   // using  ZQ_ITEMS2 extension in mvdsv we can use per client sigils for runes
+	int 	k_admin;         // if player is an admin, flags
+	float 			brokenankle; // player can't jump for a while after falling and get damaged
+	float           vw_index;
+	int         hideentity;             // links to entity to hide in eye chasecam
+	int			trackent;			// pseudo spectating for players.
+	qboolean       hideplayers;            // if set, all players hidden (read by mvdsv)
+// { highlights which clients this entity was visible to
+	unsigned int visclients;
+// }
+	// let mvdsv know when player has teleported, and adjust for high-ping
+	int          teleported;
 	float           maxspeed, gravity;
 	char           *mdl;
 	char           *killtarget;
@@ -38,6 +49,7 @@ typedef struct gedict_s {
 //
 // doors, etc
 //
+	vec3_t		    movement;
 	vec3_t          dest, dest1, dest2;
 	vec3_t          pos1, pos2, oldorigin;
 	vec3_t          mangle;
@@ -87,5 +99,9 @@ typedef struct gedict_s {
 
 	th_die_funcref_t   th_die;
 	th_pain_funcref_t  th_pain;
+    int            old_button0,old_button1,old_button2,old_keys;
+	int            isBot;
+	int            keys, nextimpulse;
+	int            action,oldAction;
 
 } gedict_t;

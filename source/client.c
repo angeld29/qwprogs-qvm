@@ -147,12 +147,12 @@ void GotoNextMap()
 //ZOID: 12-13-96, samelevel is overloaded, only 1 works for same level
 
 	if ( trap_cvar( "samelevel" ) == 1 )	// if samelevel is set, stay on same level
-		trap_changelevel( g_globalvars.mapname, "" );
+		trap_changelevel( mapname, "" );
 	else
 	{
 		// configurable map lists, see if the current map exists as a
 		// serverinfo/localinfo var
-		infokey( world, g_globalvars.mapname, newmap, sizeof( newmap ) );
+		infokey( world, mapname, newmap, sizeof( newmap ) );
 
 		if ( newmap[0] )
 			trap_changelevel( newmap, "" );
@@ -234,7 +234,7 @@ void changelevel_touch()
 //      if ((cvar("noexit") == 1) || ((cvar("noexit") == 2) && (mapname != "start")))
 	if ( ( trap_cvar( "samelevel" ) == 2 )
 	     || ( ( trap_cvar( "samelevel" ) == 3 )
-		  && ( strneq( g_globalvars.mapname, "start" ) ) ) )
+		  && ( strneq( mapname, "start" ) ) ) )
 	{
 		T_Damage( other, self, self, 50000 );
 		return;
@@ -563,47 +563,47 @@ void NextLevel()
 	if (  nextmap[0] )
 		return;		// already done
 
-	if ( streq( g_globalvars.mapname, "start" ) )
+	if ( streq( mapname, "start" ) )
 	{
 		if ( !trap_cvar( "registered" ) )
 		{
-			strcpy( g_globalvars.mapname, "e1m1" );
+			strcpy( mapname, "e1m1" );
 
 		} else if ( !( ( int ) ( g_globalvars.serverflags ) & 1 ) )
 		{
-			strcpy( g_globalvars.mapname, "e1m1" );
+			strcpy( mapname, "e1m1" );
 			g_globalvars.serverflags =
 			    ( int ) ( g_globalvars.serverflags ) | 1;
 
 		} else if ( !( ( int ) ( g_globalvars.serverflags ) & 2 ) )
 		{
-			strcpy( g_globalvars.mapname, "e2m1" );
+			strcpy( mapname, "e2m1" );
 			g_globalvars.serverflags =
 			    ( int ) ( g_globalvars.serverflags ) | 2;
 
 		} else if ( !( ( int ) ( g_globalvars.serverflags ) & 4 ) )
 		{
-			strcpy( g_globalvars.mapname, "e3m1" );
+			strcpy( mapname, "e3m1" );
 			g_globalvars.serverflags =
 			    ( int ) ( g_globalvars.serverflags ) | 4;
 
 		} else if ( !( ( int ) ( g_globalvars.serverflags ) & 8 ) )
 		{
-			strcpy( g_globalvars.mapname, "e4m1" );
+			strcpy( mapname, "e4m1" );
 			g_globalvars.serverflags =
 			    ( int ) ( g_globalvars.serverflags ) - 7;
 		}
 
 		o = spawn();
-		o->map = g_globalvars.mapname;
+		o->map = mapname;
 	} else
 	{
 		// find a trigger changelevel
 		o = find( world, FOFS( s.v.classname ), "trigger_changelevel" );
-		if ( !o || streq( g_globalvars.mapname, "start" ) )
+		if ( !o || streq( mapname, "start" ) )
 		{		// go back to same map if no trigger_changelevel
 			o = spawn();
-			o->map = g_globalvars.mapname;
+			o->map = mapname;
 		}
 	}
 

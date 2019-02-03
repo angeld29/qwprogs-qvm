@@ -42,6 +42,19 @@
 #include <ctype.h>
 #include <limits.h>
 
+	#if !defined( _WIN32 ) || !defined(_MSC_VER)
+	// so intptr_t is defined for all non MS compilers
+	#include <stdint.h>
+	#endif
+
+	#if !defined( _WIN32 )
+    // so intptr_t is defined for all non MS compilers
+	#define _vsnprintf vsnprintf
+	#define _snprintf snprintf
+
+	#endif // !defined( _WIN32 )
+
+
 #endif
 
 #define	MAX_CLIENTS		32
@@ -50,7 +63,7 @@
 #define	MAX_OSPATH		128			// max length of a filesystem pathname
 
 
-#define	MAX_EDICTS		768			// FIXME: ouch! ouch! ouch!
+#define	MAX_EDICTS		2048 //768			// FIXME: ouch! ouch! ouch!
 #define	MAX_LIGHTSTYLES	64
 #define	MAX_MODELS		256			// these are sent over the net as bytes
 #define	MAX_SOUNDS		256			// so they cannot be blindly increased
@@ -79,7 +92,10 @@ typedef enum {false, true}	qboolean;
 
 //typedef int	string_t;
 typedef char*	string_t;
-typedef int	func_t;
+typedef intptr_t	func_t;
+typedef int      stringref_t;
+typedef int      funcref_t;
+
 
 
 typedef float vec_t;

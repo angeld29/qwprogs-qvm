@@ -19,13 +19,15 @@
 #define	MAX_STRING_CHARS	1024	// max length of a string passed to Cmd_TokenizeString
 #define	MAX_STRING_TOKENS	1024	// max tokens resulting from Cmd_TokenizeString
 #define	MAX_TOKEN_CHARS		1024	// max length of an individual token
+#define MAX_STRINGS 128
 
-#define	FOFS(x) ((int)&(((gedict_t *)0)->x))
+#define	FOFS(x) ((intptr_t)&(((gedict_t *)0)->x))
 int             NUM_FOR_EDICT( gedict_t * e );
 
 
 
-extern gedict_t g_edicts[];
+extern gedict_t g_edicts[MAX_EDICTS];
+extern char mapname[64];
 extern globalvars_t g_globalvars;
 extern gedict_t *world;
 extern gedict_t *self, *other;
@@ -59,14 +61,14 @@ void            G_sprint( gedict_t * ed, int level, const char *fmt, ... );
 void            G_bprint( int level, const char *fmt, ... );
 void            G_centerprint( gedict_t * ed, const char *fmt, ... );
 void            G_dprint( const char *fmt, ... );
-int             streq( char *s1, char *s2 );
-int             strneq( char *s1, char *s2 );
+int             streq( const char *s1, const char *s2 );
+int             strneq( const char *s1, const char *s2 );
 void            aim( vec3_t ret );
 void    	setorigin( gedict_t * ed, float origin_x, float origin_y, float origin_z );
 void    	setsize( gedict_t * ed, float min_x, float min_y, float min_z, float max_x,
 		 float max_y, float max_z );
 void    	setmodel( gedict_t * ed, char *model );
-void    	sound( gedict_t * ed, int channel, char *samp, int vol, float att );
+void    	sound( gedict_t * ed, int channel, char *samp, float vol, float att );
 gedict_t 	*checkclient(  );
 void    	traceline( float v1_x, float v1_y, float v1_z, float v2_x, float v2_y, float v2_z,
 		   int nomonst, gedict_t * ed );
@@ -77,7 +79,7 @@ int     	checkbottom( gedict_t * ed );
 void    	makestatic( gedict_t * ed );
 void    	setspawnparam( gedict_t * ed );
 void    	logfrag( gedict_t * killer, gedict_t * killee );
-void    	infokey( gedict_t * ed, char *key, char *valbuff, int sizebuff );
+void    	infokey( gedict_t * ed, const char *key, char *valbuff, int sizebuff );
 void    	WriteEntity( int to, gedict_t * ed );
 void    	disableupdates( gedict_t * ed, float time );
 

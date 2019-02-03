@@ -1,7 +1,5 @@
 #include "g_local.h"
 
-extern void     trap_CmdArgv( int arg, char *valbuff, int sizebuff );
-
 void            ClientKill();
 
 qboolean 	ClientCommand()
@@ -18,6 +16,23 @@ qboolean 	ClientCommand()
 	}
 	//G_Printf("ClientCommand %s\n",cmd_command);
 	return false;
+}
+
+qboolean ClientUserInfoChanged_after(  )
+{
+	char    key[1024];
+	char    value[1024];
+	const   char   *sk;
+	int     color;
+
+	self = PROG_TO_EDICT( g_globalvars.self );
+
+	trap_CmdArgv( 1, key, sizeof( key ) );
+	if ( !strcmp( key, "name" ) )
+    {
+        trap_CmdArgv( 2, self->s.v.netname, 64 );
+    }
+    return 0;
 }
 
 qboolean ClientUserInfoChanged(  )
